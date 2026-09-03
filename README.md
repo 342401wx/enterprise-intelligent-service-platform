@@ -92,3 +92,11 @@ AI 发信会先展示收件人、主题和正文，回复“确认发送”后�
 ```powershell
 npm run build
 ```
+## 开源项目致谢
+
+本项目使用并参考了以下开源项目：
+
+- [AgentMail CLI](https://www.npmjs.com/package/@tencent-qqmail/agently-cli)：提供 AgentMail OAuth 授权、邮件收取、读取、发送和附件下载能力。
+- [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI)：用于 AI Agent 场景下的 Word、Excel、PowerPoint 等 Office 文档处理与自动化。
+
+本项目的企业邮箱功能通过 AgentMail CLI 接入；后端 Office 文件生成和解析同时使用 `python-docx`、`openpyxl` 和 `python-pptx` 等 Python 库。具体开源项目请遵循各自仓库和软件包中的许可证要求。
