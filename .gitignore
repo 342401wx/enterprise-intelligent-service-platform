@@ -24,3 +24,6 @@ tsconfig.tsbuildinfo
 output/
 __pycache__/
 *.pyc
+
+# Local Word artifacts
+*.docx
