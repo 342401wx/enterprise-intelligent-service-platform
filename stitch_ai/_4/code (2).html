@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KB Details &amp; Ingestion - AI Workbench</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2ed",
+                        "on-surface": "#191b23",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface-variant": "#434655",
+                        "background": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-surface": "#2e3039",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#006a61",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-fixed-variant": "#005049",
+                        "secondary-fixed": "#89f5e7",
+                        "secondary-container": "#86f2e4",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-on-surface": "#f0f0fb",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Noto Sans SC"],
+                        "mono-metric": ["JetBrains Mono"],
+                        "display-lg": ["Noto Sans SC"],
+                        "body-md": ["Noto Sans SC"],
+                        "body-lg-mobile": ["Noto Sans SC"],
+                        "title-sm": ["Noto Sans SC"],
+                        "label-sm": ["Noto Sans SC"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for data density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c3c6d7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #737686; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen overflow-hidden flex flex-col font-body-md antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 shadow-sm shadow-surface-variant/20">
+<div class="flex items-center gap-md">
+<span class="text-title-sm font-title-sm font-bold text-on-surface">AI Workbench</span>
+</div>
+<!-- Search Bar: on_left equivalent positioning -->
+<div class="flex-1 max-w-md ml-xl mr-auto hidden md:block relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded h-8 pl-10 pr-3 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-outline" placeholder="Global Search..." type="text"/>
+</div>
+<nav class="flex items-center gap-lg">
+<div class="hidden md:flex items-center gap-md">
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded text-label-sm font-label-sm" href="#">Docs</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded text-label-sm font-label-sm" href="#">Support</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded text-label-sm font-label-sm" href="#">API</a>
+</div>
+<button class="bg-primary text-on-primary hover:opacity-80 transition-all duration-150 rounded px-4 h-8 flex items-center gap-2 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                Create
+            </button>
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 rounded hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full border border-surface"></span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden ml-sm cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWPYG5wzbQdUti85NPQNM1uulXloG5CwwMpOwzeggPmHTwUjqz4Cn6SPv0b5xzQC-Mw0oRBA8XIqOWRPGci7zbaeatmSTY2AAE-UDE24d19SEAToM9bTs0F-X_FYC_YPeORmy2D5rIclAhG2idovQm6N73zjdcDQG9fcl2hJDtUrDZ0_ZUz-rGLume3WgGTHhSFmMVCyygyIU2kVY0MuMvr8L_i1qjWoQ2aryTnRLtEHAloD4cgKa-"/>
+</div>
+</nav>
+</header>
+<div class="flex flex-1 pt-16 h-full w-full">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low border-r border-outline-variant fixed left-0 top-0 h-full w-60 flex flex-col pt-16 pb-4 z-40">
+<!-- Header Section -->
+<div class="px-gutter py-md border-b border-outline-variant flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-on-primary-container flex-shrink-0">
+<span class="material-symbols-outlined">corporate_fare</span>
+</div>
+<div class="overflow-hidden">
+<h2 class="text-title-sm font-title-sm text-on-surface truncate">Global Admin</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant truncate">Enterprise Tier</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-md flex flex-col gap-1 px-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">dashboard</span>
+                    Workbench
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">smart_toy</span>
+                    AI Assistant
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">apps</span>
+                    My Applications
+                </a>
+<!-- Active Item -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-primary bg-primary-container/10 border-l-4 border-primary font-bold scale-95 duration-75 text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined icon-fill text-[20px]">menu_book</span>
+                    Knowledge Base
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">mail</span>
+                    Email
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">description</span>
+                    File Gen
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">notifications</span>
+                    Notifications
+                </a>
+<div class="my-2 border-t border-outline-variant/50 mx-2"></div>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">groups</span>
+                    Org &amp; Permissions
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">account_tree</span>
+                    Model Config
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">monitoring</span>
+                    Monitoring
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">history</span>
+                    Audit
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all text-body-md font-body-md group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors text-[20px]">settings</span>
+                    System Settings
+                </a>
+</nav>
+<!-- Footer Section -->
+<div class="px-4 pt-4 border-t border-outline-variant flex flex-col gap-2">
+<button class="w-full border border-primary text-primary hover:bg-primary-container/10 transition-colors rounded h-8 flex items-center justify-center text-label-sm font-label-sm font-medium">
+                    Upgrade Plan
+                </button>
+<div class="flex justify-between items-center mt-2">
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+                        Log Out
+                    </a>
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">help_outline</span>
+                        Help
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-60 overflow-y-auto bg-surface flex flex-col">
+<!-- Context Header -->
+<div class="px-margin-desktop py-lg bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-sm bg-surface-variant text-on-surface-variant text-[10px] font-mono uppercase tracking-wider">ID: KB-77A912</span>
+<span class="px-2 py-0.5 rounded-sm bg-secondary-container/30 text-secondary text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">public</span> Global Region</span>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-[28px] text-primary">source</span>
+                            Corporate Policies &amp; Procedures
+                        </h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-2 max-w-3xl">
+                            Central repository for all compliance, HR, and operational documentation. Content here is vectorized for the internal Support Assistant model.
+                        </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-surface-container-lowest border border-outline text-on-surface rounded px-4 h-9 flex items-center gap-2 text-label-sm font-label-sm hover:bg-surface-container-low transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">sync</span> Sync External
+                        </button>
+<button class="bg-primary text-on-primary rounded px-4 h-9 flex items-center gap-2 text-label-sm font-label-sm hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upload_file</span> Upload Document
+                        </button>
+</div>
+</div>
+<!-- Metrics Bento -->
+<div class="grid grid-cols-4 gap-4 mt-6">
+<div class="bg-surface border border-outline-variant rounded-lg p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">description</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Total Documents</p>
+<p class="text-display-lg font-display-lg text-on-surface leading-tight">1,248</p>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">data_check</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Indexed Chunks</p>
+<p class="text-display-lg font-display-lg text-on-surface leading-tight font-mono-metric">84.2M</p>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[24px]">pending_actions</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Pending Audit</p>
+<p class="text-display-lg font-display-lg text-on-surface leading-tight">12</p>
+</div>
+</div>
+<div class="bg-error-container/30 border border-error/20 rounded-lg p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[24px]">error</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-error">Failed Ingestion</p>
+<p class="text-display-lg font-display-lg text-error leading-tight">3</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tabs Navigation -->
+<div class="px-margin-desktop border-b border-outline-variant bg-surface-container-lowest sticky top-0 z-10">
+<div class="flex space-x-6">
+<button class="py-3 px-1 border-b-2 border-primary text-primary font-title-sm text-title-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">folder_open</span> Documents
+                    </button>
+<button class="py-3 px-1 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">list_alt</span> Ingestion Tasks
+                    </button>
+<button class="py-3 px-1 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">manage_search</span> Search Test
+                    </button>
+<button class="py-3 px-1 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">shield_person</span> Permissions
+                    </button>
+<button class="py-3 px-1 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span> Model Config
+                    </button>
+</div>
+</div>
+<!-- Tab Content: Documents List -->
+<div class="flex-1 p-margin-desktop flex flex-col">
+<!-- Action Bar -->
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[16px]">filter_list</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded h-8 pl-9 pr-3 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm text-sm" placeholder="Filter documents..." type="text"/>
+</div>
+<button class="h-8 px-3 border border-outline-variant bg-surface-container-lowest rounded text-on-surface flex items-center gap-1 hover:bg-surface-container-low text-label-sm font-label-sm shadow-sm">
+                            Status: All <span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</button>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-sm font-label-sm">
+                        Showing 1-10 of 1,248
+                        <div class="flex gap-1 ml-2">
+<button class="w-6 h-6 border border-outline-variant rounded flex items-center justify-center hover:bg-surface-variant"><span class="material-symbols-outlined text-[14px]">chevron_left</span></button>
+<button class="w-6 h-6 border border-outline-variant rounded flex items-center justify-center hover:bg-surface-variant"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Data Table Workspace -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg shadow-sm flex-1 overflow-hidden flex flex-col">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low">
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-[30%]">Document</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-[10%]">Size</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-[45%]">Ingestion Pipeline Status</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-[15%] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-md font-body-md">
+<!-- Row 1: Published (Success) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error text-[20px]">picture_as_pdf</span>
+<div>
+<p class="text-on-surface font-medium truncate max-w-[200px]">2024_Q1_Benefits_Summary_v2.pdf</p>
+<p class="text-label-sm text-on-surface-variant">Uploaded 2h ago by System</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface font-mono-metric">2.4 MB</td>
+<td class="py-3 px-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center space-x-1" title="All stages complete">
+<!-- Steps 1-8 Done -->
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Upload"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Parse"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Clean"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Chunk"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Vector Index"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Full-text Index"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Audit"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0" title="Published"></div>
+</div>
+<span class="text-[10px] text-secondary font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span> Published
+                                            </span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm font-medium">View Source</button>
+</td>
+</tr>
+<!-- Row 2: In Progress -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">description</span>
+<div>
+<p class="text-on-surface font-medium truncate max-w-[200px]">Engineering_Onboarding_Draft.docx</p>
+<p class="text-label-sm text-on-surface-variant">Uploaded 5m ago by J. Doe</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface font-mono-metric">8.1 MB</td>
+<td class="py-3 px-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center space-x-1">
+<!-- Steps 1-3 Done, 4 Active, 5-8 Pending -->
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<!-- Active Step: Chunking -->
+<div class="w-3 h-3 rounded-full border-2 border-primary bg-surface-container-lowest flex-shrink-0 animate-pulse relative">
+<span class="absolute -top-1 -right-1 w-1.5 h-1.5 bg-primary rounded-full animate-ping"></span>
+</div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+</div>
+<span class="text-[10px] text-primary font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] animate-spin">sync</span> Chunking Data... (45%)
+                                            </span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-on-surface-variant hover:text-error font-label-sm text-label-sm font-medium">Cancel</button>
+</td>
+</tr>
+<!-- Row 3: Failed -->
+<tr class="bg-error-container/10 hover:bg-error-container/20 transition-colors group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">dataset</span>
+<div>
+<p class="text-on-surface font-medium truncate max-w-[200px]">Legacy_Financials_2019.csv</p>
+<p class="text-label-sm text-on-surface-variant">Uploaded 1d ago by System</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface font-mono-metric">124.5 MB</td>
+<td class="py-3 px-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center space-x-1">
+<!-- Steps 1-2 Done, 3 Failed, 4-8 Pending -->
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-error flex-shrink-0"></div>
+<!-- Failed Step: Clean -->
+<div class="w-3 h-3 rounded-full bg-error flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[8px] text-on-error icon-fill">close</span>
+</div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+</div>
+<span class="text-[10px] text-error font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">warning</span> Failed at Clean: Encoding Error
+                                            </span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-3">
+<button class="text-error hover:text-on-error-container font-label-sm text-label-sm font-medium border-b border-dashed border-error">View Error</button>
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface hover:bg-surface-container-low rounded px-3 py-1 text-label-sm font-label-sm shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">refresh</span> Retry
+                                            </button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Pending Admin Audit -->
+<tr class="bg-surface-container/50 hover:bg-surface-container transition-colors group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-[20px]">notes</span>
+<div>
+<p class="text-on-surface font-medium truncate max-w-[200px]">CEO_All_Hands_Q3_Transcript.txt</p>
+<p class="text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[12px] text-tertiary">lock</span> Requires PII Review</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface font-mono-metric">45 KB</td>
+<td class="py-3 px-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center space-x-1">
+<!-- Steps 1-6 Done, 7 Active(Pending Action), 8 Pending -->
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-secondary flex-shrink-0 opacity-50"></div>
+<div class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="w-3 h-[2px] bg-tertiary flex-shrink-0"></div>
+<!-- Action Required Step: Audit -->
+<div class="w-3 h-3 rounded-full border-2 border-tertiary bg-tertiary-container/20 flex-shrink-0 relative">
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] text-tertiary font-bold">4g_mobiledata</span>
+</div>
+<div class="w-3 h-[2px] bg-outline-variant flex-shrink-0"></div>
+<div class="w-3 h-3 rounded-full border border-outline-variant bg-transparent flex-shrink-0"></div>
+</div>
+<span class="text-[10px] text-tertiary font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">admin_panel_settings</span> Awaiting Admin Approval
+                                            </span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="bg-primary text-on-primary hover:opacity-90 transition-all rounded px-3 py-1 text-label-sm font-label-sm shadow-sm flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">fact_check</span> Approve
+                                        </button>
+</td>
+</tr>
+<!-- Filler Row for layout -->
+<tr class="hover:bg-surface-container-low transition-colors group border-transparent">
+<td class="py-8 px-4 text-center text-on-surface-variant text-label-sm" colspan="4">
+                                        Scroll for more documents...
+                                    </td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Legend Footer -->
+<div class="bg-surface border-t border-outline-variant p-3 flex items-center justify-center gap-6 text-[11px] font-mono-metric text-on-surface-variant uppercase">
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-secondary"></div> Complete</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full border border-primary bg-transparent animate-pulse"></div> Processing</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full border border-tertiary"></div> Manual Action</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-error"></div> Failed</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full border border-outline-variant"></div> Pending</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

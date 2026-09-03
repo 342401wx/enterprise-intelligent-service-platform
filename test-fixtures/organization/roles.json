@@ -1,0 +1,5 @@
+[
+  {"id":"admin","name":"管理员","description":"维护组织、权限、知识库、模型和审计配置"},
+  {"id":"manager","name":"管理层","description":"审批所属组织申请并查看授权范围数据"},
+  {"id":"employee","name":"普通员工","description":"使用授权知识库和企业服务工具"}
+]

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leave Application</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2ed",
+                        "on-surface": "#191b23",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface-variant": "#434655",
+                        "background": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-surface": "#2e3039",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#006a61",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-fixed-variant": "#005049",
+                        "secondary-fixed": "#89f5e7",
+                        "secondary-container": "#86f2e4",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-on-surface": "#f0f0fb",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Noto Sans SC"],
+                        "mono-metric": ["JetBrains Mono"],
+                        "display-lg": ["Noto Sans SC"],
+                        "body-md": ["Noto Sans SC"],
+                        "body-lg-mobile": ["Noto Sans SC"],
+                        "title-sm": ["Noto Sans SC"],
+                        "label-sm": ["Noto Sans SC"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface-container-low dark:bg-surface-container-lowest fixed left-0 h-full w-60 border-r border-outline-variant dark:border-outline flex-col pt-16 pb-4 z-40 transition-all">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm">business</span>
+</div>
+<div>
+<h2 class="text-headline-md font-headline-md font-extrabold text-primary dark:text-inverse-primary text-[16px] leading-tight">Global Admin</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Tier</p>
+</div>
+</div>
+<button class="mt-md w-full bg-primary-container text-on-primary-container text-label-sm font-label-sm rounded-lg py-sm font-medium hover:opacity-90 transition-opacity">
+                Upgrade Plan
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-unit">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Workbench
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+                AI Assistant
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary dark:text-inverse-primary bg-primary-container/10 border-l-4 border-primary font-bold text-label-sm font-label-sm scale-95 duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="apps" style="font-variation-settings: 'FILL' 1;">apps</span>
+                My Applications
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                Knowledge Base
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+                Email
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                File Gen
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                Notifications
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Org &amp; Permissions
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+                Model Config
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                Monitoring
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                Audit
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                System Settings
+            </a>
+</div>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant/30 flex flex-col gap-unit">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Log Out
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Help
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-60 h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-dim fixed top-0 left-0 md:left-60 right-0 w-auto z-50 flex justify-between items-center px-margin-desktop h-16 border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-lg">
+<span class="text-title-sm font-title-sm font-bold text-on-surface dark:text-inverse-on-surface">AI Workbench</span>
+<!-- Search Bar -->
+<div class="hidden md:flex items-center bg-surface-container-high rounded-full px-sm py-unit w-64 border border-outline-variant/50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-sm ml-unit" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant w-full py-unit h-6" placeholder="Search..." type="text"/>
+</div>
+<nav class="hidden lg:flex gap-md">
+<a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-sm py-unit rounded-md" href="#">Docs</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-sm py-unit rounded-md" href="#">Support</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-label-sm font-label-sm hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-sm py-unit rounded-md" href="#">API</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-on-primary text-label-sm font-label-sm px-md py-sm rounded-md font-medium hover:opacity-80 transition-all duration-150 flex items-center gap-sm">
+                    Create
+                </button>
+<div class="flex items-center gap-xs border-l border-outline-variant/30 pl-md ml-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-high rounded-full p-sm transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-high rounded-full p-sm transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-high rounded-full p-sm transition-colors flex items-center justify-center relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover ml-sm border border-outline-variant" data-alt="A small, professional avatar portrait of a modern office worker in a well-lit corporate setting, minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2dmQyf4wHKQmu1rtDnG4W-KPMmwFkJYrJ7rZjfO0LhoQPObkGIIJqmbaqRucsWEopD-EdYNMu7-hq_gFKd0wQrg9ZRBGdpnOqFG8zH5AgYOGB8AxUY1xmr6N7HPztwq_n7JBcjZ6ohKvQBnLdvcho9Y4--zcQuEM6ri1AKAVt0YLNuiDAWp7V1UMGIQ2Sw3EgS3QE5Wi64IFQqRqo-PofOJDdwcsV8eAI84_bBhZ5TzKrOF_4vScX"/>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto pt-16 p-lg md:p-margin-desktop bg-surface">
+<div class="max-w-7xl mx-auto">
+<!-- Page Header -->
+<div class="mb-lg">
+<h1 class="text-display-lg font-display-lg text-on-surface mb-xs">Leave Application</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Submit and track your time off requests.</p>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Stepper & Form (Cols 1-8) -->
+<div class="xl:col-span-8 flex flex-col gap-lg">
+<!-- Stepper Component -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm">
+<div class="flex items-center justify-between relative">
+<!-- Connecting Line -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-surface-variant -z-10 -translate-y-1/2"></div>
+<!-- Step 1: Active -->
+<div class="flex flex-col items-center gap-sm bg-surface-container-lowest px-sm">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-label-sm font-label-sm font-bold border-2 border-surface-container-lowest">1</div>
+<span class="text-label-sm font-label-sm text-primary font-bold">Fill Info</span>
+</div>
+<!-- Step 2: Pending -->
+<div class="flex flex-col items-center gap-sm bg-surface-container-lowest px-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-label-sm font-label-sm border-2 border-surface-container-lowest">2</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Policy Check</span>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex flex-col items-center gap-sm bg-surface-container-lowest px-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-label-sm font-label-sm border-2 border-surface-container-lowest">3</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Submit</span>
+</div>
+<!-- Step 4: Pending -->
+<div class="flex flex-col items-center gap-sm bg-surface-container-lowest px-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-label-sm font-label-sm border-2 border-surface-container-lowest">4</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Approval</span>
+</div>
+<!-- Step 5: Pending -->
+<div class="flex flex-col items-center gap-sm bg-surface-container-lowest px-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-label-sm font-label-sm border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Done</span>
+</div>
+</div>
+</div>
+<!-- Form Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<h2 class="text-title-sm font-title-sm text-on-surface mb-lg border-b border-outline-variant pb-sm">Application Details</h2>
+<form class="flex flex-col gap-md">
+<!-- Type -->
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface flex items-center gap-xs">
+                                        Leave Type <span class="text-error">*</span>
+</label>
+<div class="relative">
+<select class="w-full bg-surface border border-outline-variant rounded-md py-sm px-md text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim appearance-none">
+<option disabled="" selected="" value="">Select leave type...</option>
+<option value="annual">Annual Leave</option>
+<option value="sick">Sick Leave</option>
+<option value="personal">Personal Leave</option>
+<option value="maternity">Maternity/Paternity Leave</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Date Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Start Time -->
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface flex items-center gap-xs">
+                                            Start Date &amp; Time <span class="text-error">*</span>
+</label>
+<div class="flex gap-xs">
+<div class="relative flex-1">
+<input class="w-full bg-surface border border-outline-variant rounded-md py-sm pl-md pr-sm text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" type="date"/>
+</div>
+<div class="relative w-32">
+<input class="w-full bg-surface border border-outline-variant rounded-md py-sm px-sm text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" type="time" value="09:00"/>
+</div>
+</div>
+</div>
+<!-- End Time -->
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface flex items-center gap-xs">
+                                            End Date &amp; Time <span class="text-error">*</span>
+</label>
+<div class="flex gap-xs">
+<div class="relative flex-1">
+<input class="w-full bg-surface border border-outline-variant rounded-md py-sm pl-md pr-sm text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" type="date"/>
+</div>
+<div class="relative w-32">
+<input class="w-full bg-surface border border-outline-variant rounded-md py-sm px-sm text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" type="time" value="18:00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Duration Calculation (Visual feedback) -->
+<div class="bg-surface-container flex items-center gap-sm p-sm rounded-md border border-outline-variant/50">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Estimated Duration:</span>
+<span class="text-body-md font-body-md text-on-surface font-semibold">-- days</span>
+</div>
+<!-- Reason -->
+<div class="flex flex-col gap-xs mt-sm">
+<label class="text-label-sm font-label-sm text-on-surface flex items-center gap-xs group relative w-fit">
+                                        Reason <span class="text-error">*</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-help" data-icon="info">info</span>
+<!-- Tooltip -->
+<div class="absolute left-full top-1/2 -translate-y-1/2 ml-sm hidden group-hover:block w-48 bg-inverse-surface text-inverse-on-surface text-label-sm font-label-sm p-sm rounded-md z-10 shadow-lg">
+                                            Please provide sufficient detail for your manager to review.
+                                        </div>
+</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-md py-sm px-md text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim resize-y" placeholder="Briefly describe the reason for your leave..." rows="4"></textarea>
+</div>
+<!-- Handover Person -->
+<div class="flex flex-col gap-xs mt-sm">
+<label class="text-label-sm font-label-sm text-on-surface flex items-center gap-xs">
+                                        Handover Person
+                                    </label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="person">person</span>
+<input class="w-full bg-surface border border-outline-variant rounded-md py-sm pl-10 pr-md text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" placeholder="Search colleague by name or ID..." type="text"/>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-xs">Optional for leaves under 2 days.</p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-md mt-lg pt-md border-t border-outline-variant justify-end">
+<button class="px-lg py-sm rounded-md border border-outline-variant bg-surface-container-lowest text-on-surface text-label-sm font-label-sm hover:bg-surface-variant transition-colors" type="button">
+                                        Save Draft
+                                    </button>
+<button class="px-lg py-sm rounded-md bg-primary text-on-primary text-label-sm font-label-sm hover:bg-on-primary-fixed-variant transition-colors flex items-center gap-xs" type="button">
+                                        Proceed to Policy Check
+                                        <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Right Column: Contextual Info (Cols 9-12) -->
+<div class="xl:col-span-4 flex flex-col gap-lg">
+<!-- Leave Balance Bento Box -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<h3 class="text-title-sm font-title-sm text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+                                Remaining Balance
+                            </h3>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container rounded-lg p-md text-center border border-outline-variant/30">
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-unit">Annual Leave</p>
+<p class="text-display-lg font-mono-metric text-primary">14.5</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-unit">Days</p>
+</div>
+<div class="bg-surface-container rounded-lg p-md text-center border border-outline-variant/30">
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-unit">Sick Leave</p>
+<p class="text-display-lg font-mono-metric text-secondary">06.0</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-unit">Days</p>
+</div>
+</div>
+<div class="mt-md text-center">
+<a class="text-label-sm font-label-sm text-primary hover:underline" href="#">View detailed accrual history</a>
+</div>
+</div>
+<!-- Policy Summary -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<h3 class="text-title-sm font-title-sm text-on-surface mb-md flex items-center gap-sm border-b border-outline-variant pb-sm">
+<span class="material-symbols-outlined text-tertiary" data-icon="gavel">gavel</span>
+                                Policy Summary
+                            </h3>
+<ul class="text-body-md font-body-md text-on-surface-variant space-y-md">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>Requests over 3 consecutive days require Level 2 Manager approval.</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>Sick leave exceeding 2 days requires a medical certificate upload upon return.</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>Ensure handover documentation is complete before departure.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Portal - 监控</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3fe",
+                        "secondary": "#006a61",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "secondary-fixed": "#89f5e7",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "inverse-surface": "#2e3039",
+                        "outline": "#737686",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed": "#dbe1ff",
+                        "on-surface": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed-variant": "#005049",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "background": "#faf8ff",
+                        "on-background": "#191b23",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e7e7f3",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#2563eb",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary": "#943700",
+                        "surface-variant": "#e1e2ed",
+                        "secondary-container": "#86f2e4",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Noto Sans SC"],
+                        "body-lg-mobile": ["Noto Sans SC"],
+                        "headline-md": ["Noto Sans SC"],
+                        "body-md": ["Noto Sans SC"],
+                        "display-lg": ["Noto Sans SC"],
+                        "mono-metric": ["JetBrains Mono"],
+                        "title-sm": ["Noto Sans SC"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #f9fafb; color: #191b23; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .card-shadow { box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -2px rgba(0, 0, 0, 0.05); }
+        .log-container::-webkit-scrollbar { width: 6px; }
+        .log-container::-webkit-scrollbar-track { background: transparent; }
+        .log-container::-webkit-scrollbar-thumb { background-color: #d1d5db; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-background min-h-screen text-on-background flex flex-col md:flex-row">
+<!-- SideNavBar (Hidden on Mobile, Visible on Desktop) -->
+<aside class="hidden md:flex flex-col py-md overflow-y-auto bg-surface-container-lowest dark:bg-surface-dim border-r border-outline-variant dark:border-outline flat no shadows docked h-screen w-60 left-0 top-0 fixed z-50">
+<div class="px-md mb-xl flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="hub">hub</span>
+<div>
+<h1 class="text-title-sm font-title-sm text-on-surface dark:text-on-surface-variant font-bold truncate">AI Service Portal</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant truncate">Enterprise Edition</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs px-sm">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-sm font-label-sm">Workbench</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-sm font-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+<span class="text-label-sm font-label-sm">Applications</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-sm font-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="text-label-sm font-label-sm">Email</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-label-sm font-label-sm">File Gen</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="text-label-sm font-label-sm">Notifications</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-label-sm font-label-sm">Org &amp; Permissions</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="text-label-sm font-label-sm">Model Config</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed bg-surface-container-low dark:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+<span class="text-label-sm font-label-sm">Monitoring</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+<span class="text-label-sm font-label-sm">Audit</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-sm font-label-sm">System Settings</span>
+</a>
+</nav>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 h-16 flex items-center justify-between px-lg z-40 bg-opacity-90 backdrop-blur-none bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant dark:border-outline flat no shadows md:pl-60">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed font-bold tracking-tight">AI Portal</span>
+<div class="hidden md:flex gap-md ml-xl h-full items-center">
+<a class="h-full flex items-center text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 scale-95 transition-transform duration-100 px-sm" href="#">
+<span class="text-label-sm font-label-sm font-bold">Operations</span>
+</a>
+<a class="h-full flex items-center text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors px-sm" href="#">
+<span class="text-label-sm font-label-sm">Reports</span>
+</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center bg-surface-container-low px-sm py-xs rounded border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs" data-icon="search">search</span>
+<input class="bg-transparent border-none text-body-md font-body-md focus:ring-0 p-0 text-on-surface-variant placeholder-outline w-48" placeholder="Search..." type="text"/>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant hidden md:block border-r border-outline-variant pr-md">Department: Engineering</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span></button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant ml-sm" data-alt="A small, professional circular avatar profile picture of an enterprise user against a neutral grey background. The image should be cleanly lit and minimalist, suitable for a corporate dashboard top navigation bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOZxI_dD-gLk4OyPWIZo3ZOKpmtPQ2mUKjzjP5H40VD0Moeu7uF2J7cRbjzk6TCNdJPWfuKRStJGl6iWg-YHenX-R-NbLlR286i6mlD3rsJ8adQ6M68NM7Z5LtUz_hoJOxxUYFKhTM_1vBNx_Cc2G1Yqorer1ywyVAyVNa7HZeYdJjFHB6ZGn-P9aM2Bjmlw3s2uWx9puyyvn5fLYTO1ZdqQ06eWg_9RmLk_YbuaQwkYIY6g3iXg1G"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 mt-16 md:ml-60 p-margin-mobile md:p-margin-desktop overflow-x-hidden flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h2 class="text-display-lg font-display-lg text-on-surface mb-xs">入库和 Agent 运行监控</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">实时追踪文档处理进度与智能体执行状态</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-xs px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface text-label-sm font-label-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+                    刷新
+                </button>
+<button class="flex items-center gap-xs px-md py-sm bg-primary-container text-on-primary rounded-lg text-label-sm font-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                    导出报告
+                </button>
+</div>
+</div>
+<!-- KPI Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-sm hover:border-primary transition-colors group">
+<div class="flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">总任务处理量</span>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1 rounded-md" data-icon="task">task</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-display-lg font-display-lg text-on-surface font-mono-metric">24,592</span>
+<span class="text-label-sm font-label-sm text-secondary flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> 12%
+                    </span>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-sm hover:border-primary transition-colors">
+<div class="flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">整体成功率</span>
+<span class="material-symbols-outlined text-secondary bg-secondary-container p-1 rounded-md" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-display-lg font-display-lg text-on-surface font-mono-metric">98.4%</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">过去 24 小时</span>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-sm hover:border-primary transition-colors">
+<div class="flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">平均处理耗时</span>
+<span class="material-symbols-outlined text-tertiary bg-tertiary-fixed p-1 rounded-md" data-icon="timer">timer</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-display-lg font-display-lg text-on-surface font-mono-metric">1.2s</span>
+<span class="text-label-sm font-label-sm text-error flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> 0.3s
+                    </span>
+</div>
+</div>
+<!-- Metric Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-sm hover:border-error transition-colors">
+<div class="flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">异常警报数</span>
+<span class="material-symbols-outlined text-error bg-error-container p-1 rounded-md" data-icon="warning">warning</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-display-lg font-display-lg text-error font-mono-metric">47</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">需人工干预</span>
+</div>
+</div>
+</div>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg flex-1">
+<!-- Ingestion Tasks List (Spans 8 columns on large screens) -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-bright rounded-t-xl">
+<h3 class="text-title-sm font-title-sm text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+                        实时入库任务
+                    </h3>
+<div class="flex gap-sm">
+<button class="text-label-sm font-label-sm px-sm py-1 bg-surface-container rounded border border-outline-variant text-on-surface-variant">全部</button>
+<button class="text-label-sm font-label-sm px-sm py-1 bg-transparent rounded border border-transparent hover:bg-surface-container text-on-surface-variant">处理中</button>
+</div>
+</div>
+<div class="p-sm flex-1 overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium">Task ID</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium">文档名称</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium w-48">整体进度</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium text-center">解析</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium text-center">清洗</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium text-center">切块</th>
+<th class="p-sm text-label-sm font-label-sm text-on-surface-variant font-medium text-center">索引</th>
+</tr>
+</thead>
+<tbody class="text-body-md font-body-md">
+<!-- Task Row 1 -->
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors group">
+<td class="p-sm font-mono-metric text-primary">#TK-8932</td>
+<td class="p-sm text-on-surface truncate max-w-[150px]">2023_Q4_Financial_Report.pdf</td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 75%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-mono-metric">75%</span>
+</div>
+</td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center">
+<span class="material-symbols-outlined text-primary text-sm animate-spin" data-icon="progress_activity">progress_activity</span>
+</td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span></td>
+</tr>
+<!-- Task Row 2 -->
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors">
+<td class="p-sm font-mono-metric text-primary">#TK-8933</td>
+<td class="p-sm text-on-surface truncate max-w-[150px]">Employee_Handbook_v2.docx</td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 100%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-mono-metric">100%</span>
+</div>
+</td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+</tr>
+<!-- Task Row 3 (Error) -->
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors bg-error-container/10">
+<td class="p-sm font-mono-metric text-error">#TK-8934</td>
+<td class="p-sm text-on-surface truncate max-w-[150px]">Corrupted_Data_Dump.csv</td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 25%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-error font-mono-metric">25%</span>
+</div>
+</td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-error text-sm" data-icon="error">error</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="remove">remove</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="remove">remove</span></td>
+</tr>
+<!-- Task Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-sm font-mono-metric text-primary">#TK-8935</td>
+<td class="p-sm text-on-surface truncate max-w-[150px]">System_Architecture_Diagrams.pdf</td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 10%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-mono-metric">10%</span>
+</div>
+</td>
+<td class="p-sm text-center">
+<span class="material-symbols-outlined text-primary text-sm animate-spin" data-icon="progress_activity">progress_activity</span>
+</td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span></td>
+<td class="p-sm text-center"><span class="material-symbols-outlined text-outline-variant text-sm" data-icon="radio_button_unchecked">radio_button_unchecked</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Column Stack (Spans 4 columns) -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<!-- Agent Real-time Log Stream -->
+<div class="bg-inverse-surface border border-outline-variant rounded-xl flex flex-col flex-1 min-h-[300px]">
+<div class="p-md border-b border-outline/30 flex justify-between items-center">
+<h3 class="text-title-sm font-title-sm text-inverse-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="terminal">terminal</span>
+                            Agent 运行日志
+                        </h3>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-outline-variant">Live</span>
+</div>
+</div>
+<div class="p-md flex-1 overflow-y-auto log-container font-mono-metric text-[12px] leading-relaxed text-outline-variant bg-[#1e1e24] rounded-b-xl space-y-1">
+<div class="text-primary-fixed-dim">[14:32:01] INFO [Agent-Manager] Initializing DocumentParserAgent...</div>
+<div>[14:32:02] DEBUG [DocParser] Loading PDF #TK-8932 into memory. Size: 4.2MB</div>
+<div class="text-secondary-fixed">[14:32:05] SUCCESS [DocParser] Text extraction complete. Characters: 45,291</div>
+<div class="text-primary-fixed-dim">[14:32:05] INFO [Agent-Manager] Passing to DataCleanerAgent...</div>
+<div>[14:32:06] DEBUG [DataCleaner] Applying regex filters...</div>
+<div class="text-error">[14:32:08] ERROR [DataCleaner] Failed to parse encoding on line 402 in #TK-8934. Aborting task.</div>
+<div class="text-primary-fixed-dim">[14:32:08] INFO [Agent-Manager] Handing over #TK-8932 to ChunkingAgent...</div>
+<div>[14:32:09] DEBUG [Chunking] Semantic splitting active. Token limit: 512.</div>
+<div class="text-on-surface-variant italic mt-sm">Waiting for new events...</div>
+</div>
+</div>
+<!-- Error Alert Stats -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-error" data-icon="warning_amber">warning_amber</span>
+                        错误警报统计
+                    </h3>
+<div class="flex flex-col gap-sm">
+<!-- Alert Item -->
+<div class="flex items-center justify-between p-sm rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error text-sm" data-icon="format_color_text">format_color_text</span>
+</div>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">编码解析失败</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">清洗阶段 (DataCleaner)</p>
+</div>
+</div>
+<span class="text-title-sm font-title-sm text-error font-mono-metric">24</span>
+</div>
+<!-- Alert Item -->
+<div class="flex items-center justify-between p-sm rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="memory">memory</span>
+</div>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">内存溢出 OOM</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">切块阶段 (Chunking)</p>
+</div>
+</div>
+<span class="text-title-sm font-title-sm text-tertiary font-mono-metric">12</span>
+</div>
+<!-- Alert Item -->
+<div class="flex items-center justify-between p-sm rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="api">api</span>
+</div>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">API 速率限制</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">索引阶段 (VectorDB)</p>
+</div>
+</div>
+<span class="text-title-sm font-title-sm text-on-surface-variant font-mono-metric">8</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

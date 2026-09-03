@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Workbench - AI Assistant Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e1e2ed",
+                      "on-surface": "#191b23",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#360f00",
+                      "on-surface-variant": "#434655",
+                      "background": "#faf8ff",
+                      "outline-variant": "#c3c6d7",
+                      "surface": "#faf8ff",
+                      "on-secondary-container": "#006f66",
+                      "on-primary-container": "#eeefff",
+                      "primary-fixed": "#dbe1ff",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "inverse-primary": "#b4c5ff",
+                      "inverse-surface": "#2e3039",
+                      "surface-container": "#ededf9",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "outline": "#737686",
+                      "on-tertiary-container": "#ffede6",
+                      "surface-container-high": "#e7e7f3",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#faf8ff",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "secondary": "#006a61",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-secondary-fixed-variant": "#005049",
+                      "secondary-fixed": "#89f5e7",
+                      "secondary-container": "#86f2e4",
+                      "tertiary-fixed": "#ffdbcd",
+                      "inverse-on-surface": "#f0f0fb",
+                      "primary-container": "#2563eb",
+                      "on-background": "#191b23",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f3f3fe",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "surface-container-highest": "#e1e2ed",
+                      "primary": "#004ac6",
+                      "on-primary-fixed": "#00174b",
+                      "surface-dim": "#d9d9e5",
+                      "tertiary": "#943700",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#bc4800",
+                      "on-secondary-fixed": "#00201d",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#0053db",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "xl": "32px",
+                      "margin-desktop": "32px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Noto Sans SC"
+                      ],
+                      "mono-metric": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Noto Sans SC"
+                      ],
+                      "body-md": [
+                              "Noto Sans SC"
+                      ],
+                      "body-lg-mobile": [
+                              "Noto Sans SC"
+                      ],
+                      "title-sm": [
+                              "Noto Sans SC"
+                      ],
+                      "label-sm": [
+                              "Noto Sans SC"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-metric": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg-mobile": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Light mode forcing as per prompt requirements despite html dark class in boilerplate */
+        :root {
+            color-scheme: light;
+        }
+        body {
+            background-color: #faf8ff; /* background */
+            color: #191b23; /* on-background */
+        }
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+        }
+        .filled-icon {
+          font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom scrollbar for dense interfaces */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c3c6d7; /* outline-variant */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #737686; /* outline */
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md bg-background antialiased h-screen overflow-hidden flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface border-b border-outline-variant flat no shadows">
+<div class="flex items-center gap-6">
+<span class="text-title-sm font-title-sm font-bold text-on-surface">AI Workbench</span>
+<div class="relative w-64 ml-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-9 pl-10 pr-3 rounded-DEFAULT border border-outline-variant bg-surface-container-lowest text-body-md focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-all placeholder:text-outline" placeholder="Search..." type="text"/>
+</div>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-3 py-2 rounded-DEFAULT text-label-sm font-label-sm" href="#">Docs</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-3 py-2 rounded-DEFAULT text-label-sm font-label-sm" href="#">Support</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-3 py-2 rounded-DEFAULT text-label-sm font-label-sm" href="#">API</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-DEFAULT text-label-sm font-label-sm hover:opacity-90 transition-opacity">Create</button>
+<div class="flex items-center gap-2">
+<button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+<button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A detailed headshot of a professional user in a bright, modern corporate setting, neutral background, soft professional lighting, clear and sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzxGjJaTMXiroPtR1qGes_h5M9DJAD4-ymqg6v0jc-lkXnvnbW8rsH_XEuUUeeFEyufCL2xSILBdOB1Naqjtz_WB8flJMn0ESgOz3cb6OM7dhN8xvXRQN7qkyVJo54evlu_u46cD7RuFqFezjOaGdddjclOlRboukTGc6ycE2N_WV-2_rnTYLlkZLs-bUsy-nS5Xp5_1qmAQ3DgaN8LkrBqR5cjk8Df6cvMWHzqI6G2_vvpU_35Pln"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full w-60 flex flex-col pt-16 pb-4 z-40 bg-surface-container-low border-r border-outline-variant flat no shadows">
+<div class="px-4 py-6 mb-2 border-b border-outline-variant/50">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary-container/10 border border-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">corporate_fare</span>
+</div>
+<div>
+<h2 class="text-label-sm font-label-sm font-bold text-on-surface">Global Admin</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Tier</p>
+</div>
+</div>
+<button class="w-full py-1.5 px-3 border border-outline-variant rounded-DEFAULT text-label-sm font-label-sm text-on-surface hover:bg-surface-container-high transition-colors">Upgrade Plan</button>
+</div>
+<div class="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>Workbench</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-primary bg-primary-container/10 border-l-4 border-primary font-bold text-label-sm font-label-sm Active: scale-95 duration-75" href="#"><span class="material-symbols-outlined text-[20px] filled-icon" data-icon="smart_toy">smart_toy</span>AI Assistant</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="apps">apps</span>My Applications</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="menu_book">menu_book</span>Knowledge Base</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>Email</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="description">description</span>File Gen</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>Notifications</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="groups">groups</span>Org &amp; Permissions</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="account_tree">account_tree</span>Model Config</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="monitoring">monitoring</span>Monitoring</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>Audit</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>System Settings</a>
+</div>
+<div class="px-3 py-2 border-t border-outline-variant/50 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>Log Out</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high transition-all text-label-sm font-label-sm" href="#"><span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>Help</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex ml-60 pt-16 h-full overflow-hidden">
+<!-- Left: Chat History List -->
+<div class="w-72 border-r border-outline-variant bg-surface-container-lowest flex flex-col shrink-0">
+<div class="p-4 border-b border-outline-variant">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-title-sm font-title-sm text-on-surface">Conversations</h3>
+<button class="w-8 h-8 rounded-DEFAULT hover:bg-surface-container-high flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">add_comment</span></button>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-8 pl-9 pr-3 rounded-DEFAULT border border-outline-variant bg-surface text-label-sm font-label-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-outline-variant" placeholder="Search history..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-2 space-y-1">
+<!-- Active Chat Item -->
+<div class="p-3 rounded-DEFAULT bg-primary-container/5 border border-primary/20 cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm font-bold text-on-surface truncate pr-2">Leave Request Process</span>
+<span class="text-[10px] text-on-surface-variant shrink-0">10:42 AM</span>
+</div>
+<p class="text-mono-metric font-mono-metric text-on-surface-variant text-[11px] mb-1">ID: CV-20260901-000128</p>
+<p class="text-label-sm font-label-sm text-outline truncate">I need to apply for leave next week...</p>
+</div>
+<!-- Inactive Chat Items -->
+<div class="p-3 rounded-DEFAULT hover:bg-surface-container-high border border-transparent cursor-pointer transition-colors">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-on-surface truncate pr-2">Q3 Financial Report Analysis</span>
+<span class="text-[10px] text-on-surface-variant shrink-0">Yesterday</span>
+</div>
+<p class="text-mono-metric font-mono-metric text-on-surface-variant text-[11px] mb-1">ID: CV-20260831-000084</p>
+<p class="text-label-sm font-label-sm text-outline truncate">Summarize the key metrics from...</p>
+</div>
+<div class="p-3 rounded-DEFAULT hover:bg-surface-container-high border border-transparent cursor-pointer transition-colors">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-on-surface truncate pr-2">Server Outage Troubleshooting</span>
+<span class="text-[10px] text-on-surface-variant shrink-0">Aug 29</span>
+</div>
+<p class="text-mono-metric font-mono-metric text-on-surface-variant text-[11px] mb-1">ID: CV-20260829-000412</p>
+<p class="text-label-sm font-label-sm text-outline truncate">Check the logs for node-cluster-04...</p>
+</div>
+</div>
+</div>
+<!-- Center: Chat Viewport -->
+<div class="flex-1 flex flex-col bg-surface relative min-w-[400px]">
+<!-- Header for Chat Viewport -->
+<div class="h-14 border-b border-outline-variant flex items-center justify-between px-6 bg-surface-container-lowest shrink-0">
+<div class="flex items-center gap-3">
+<span class="text-mono-metric font-mono-metric bg-surface-container-low px-2 py-1 rounded text-on-surface border border-outline-variant/50">CV-20260901-000128</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary-container/10 text-primary border border-primary/20">HR Assistant Mode</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">share</span></button>
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[75%]">
+<div class="bg-surface-container-high text-on-surface p-4 rounded-xl rounded-tr-sm border border-outline-variant/30">
+<p class="text-body-md font-body-md">I need to take time off next week, from Wednesday to Friday. Can you check my balance and submit a leave request?</p>
+</div>
+<span class="text-[11px] text-on-surface-variant mt-1 block text-right">10:42 AM</span>
+</div>
+</div>
+<!-- AI Message (Streaming / Multi-part) -->
+<div class="flex justify-start gap-4">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[18px]">smart_toy</span>
+</div>
+<div class="max-w-[85%] space-y-4">
+<!-- Text Response -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl rounded-tl-sm shadow-sm">
+<p class="text-body-md font-body-md text-on-surface mb-3 leading-relaxed">
+                                I've checked your leave balance and the company policy. You currently have <strong class="text-primary">12 days</strong> of annual leave remaining.
+                            </p>
+<p class="text-body-md font-body-md text-on-surface leading-relaxed mb-4">
+                                According to the HR guidelines, a 3-day request requires standard managerial approval but no additional documentation. 
+                                <span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary bg-secondary-container/20 px-1.5 py-0.5 rounded cursor-pointer hover:bg-secondary-container/40 transition-colors border border-secondary/20">
+<span class="material-symbols-outlined text-[14px]">menu_book</span> [1] 员工手册 p.12
+                                </span>
+</p>
+<!-- High Risk Action Confirmation Card -->
+<div class="mt-4 p-4 rounded-lg border border-primary/30 bg-primary-container/5">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary">warning</span>
+<h4 class="text-title-sm font-title-sm text-on-surface">Confirm Leave Application</h4>
+</div>
+<div class="space-y-2 mb-4 bg-surface-container-lowest p-3 rounded border border-outline-variant/50">
+<div class="flex justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Type:</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium">Annual Leave (年假)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Dates:</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium">Sep 8 - Sep 10 (3 Days)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Approver:</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium">Sarah Jenkins</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-on-primary py-2 rounded-DEFAULT text-label-sm font-label-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> Confirm &amp; Submit
+                                    </button>
+<button class="flex-1 bg-surface-container-lowest border border-outline-variant text-on-surface py-2 rounded-DEFAULT text-label-sm font-label-sm hover:bg-surface-container-high transition-colors">
+                                        Cancel
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Typing indicator -->
+<div class="flex items-center gap-1 mt-2 px-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary/60 animate-bounce"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/60 animate-bounce" style="animation-delay: 0.2s"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/60 animate-bounce" style="animation-delay: 0.4s"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer: Input Area -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant">
+<div class="max-w-4xl mx-auto">
+<!-- Tool Calling Buttons above input -->
+<div class="flex gap-2 mb-3">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container border border-outline-variant/60 text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">mail</span> Mail
+                        </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container border border-outline-variant/60 text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">description</span> Doc
+                        </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container/10 border border-primary/30 text-label-sm font-label-sm text-primary hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]">event</span> Leave System
+                        </button>
+</div>
+<div class="relative border border-outline-variant rounded-lg bg-surface focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<textarea class="w-full bg-transparent border-none focus:ring-0 resize-none p-3 text-body-md font-body-md text-on-surface placeholder:text-outline-variant" placeholder="Type a message or issue a command..." rows="3"></textarea>
+<div class="flex justify-between items-center p-2 bg-surface-container-lowest rounded-b-lg border-t border-outline-variant/30">
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-outline transition-colors" title="Attach File"><span class="material-symbols-outlined text-[20px]">attach_file</span></button>
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-outline transition-colors" title="Voice Input"><span class="material-symbols-outlined text-[20px]">mic</span></button>
+</div>
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-DEFAULT text-label-sm font-label-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-1">
+                                Send <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+<p class="text-center text-[10px] text-outline-variant mt-2">AI can make mistakes. Consider verifying important information.</p>
+</div>
+</div>
+</div>
+<!-- Right: Execution Process Panel -->
+<div class="w-80 border-l border-outline-variant bg-surface-container-lowest flex flex-col shrink-0" id="execution-panel">
+<div class="h-14 border-b border-outline-variant flex items-center justify-between px-4 bg-surface-container-low shrink-0">
+<h3 class="text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">terminal</span> 执行过程 (Execution Process)
+                </h3>
+<button class="w-7 h-7 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface-variant transition-colors" onclick="document.getElementById('execution-panel').classList.toggle('w-12'); document.getElementById('execution-content').classList.toggle('hidden');"><span class="material-symbols-outlined text-[20px]">keyboard_double_arrow_right</span></button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 bg-[#1e1e1e] text-[#d4d4d4]" id="execution-content"> <!-- Enforced dark theme for terminal feel as is common in enterprise execution panels, overriding standard surface for this specific panel to fit "Process" vibe, though keeping styling tight -->
+<div class="relative pl-6 space-y-6 before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-[#333333]">
+<!-- Timeline Item: Success -->
+<div class="relative">
+<div class="absolute -left-6 w-6 h-6 rounded-full bg-[#1e1e1e] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+</div>
+<div class="bg-[#252526] border border-[#333333] rounded p-2.5 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-mono-metric font-mono-metric text-[12px] font-medium text-[#4ec9b0]">识别为请假申请</span>
+<span class="text-[10px] bg-secondary/20 text-secondary border border-secondary/30 px-1.5 rounded">Success</span>
+</div>
+<span class="text-mono-metric font-mono-metric text-[10px] text-[#858585]">Latency: 120ms</span>
+</div>
+</div>
+<!-- Timeline Item: Success -->
+<div class="relative">
+<div class="absolute -left-6 w-6 h-6 rounded-full bg-[#1e1e1e] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+</div>
+<div class="bg-[#252526] border border-[#333333] rounded p-2.5 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-mono-metric font-mono-metric text-[12px] font-medium text-[#4ec9b0]">查询请假制度</span>
+<span class="text-[10px] bg-secondary/20 text-secondary border border-secondary/30 px-1.5 rounded">Success</span>
+</div>
+<span class="text-mono-metric font-mono-metric text-[10px] text-[#858585]">Latency: 80ms | Source: KnowledgeBase</span>
+</div>
+</div>
+<!-- Timeline Item: Success -->
+<div class="relative">
+<div class="absolute -left-6 w-6 h-6 rounded-full bg-[#1e1e1e] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+</div>
+<div class="bg-[#252526] border border-[#333333] rounded p-2.5 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-mono-metric font-mono-metric text-[12px] font-medium text-[#4ec9b0]">校验剩余年假</span>
+<span class="text-[10px] bg-secondary/20 text-secondary border border-secondary/30 px-1.5 rounded">Success</span>
+</div>
+<span class="text-mono-metric font-mono-metric text-[10px] text-[#858585]">API: hr_system.get_balance(user_id) -&gt; 12</span>
+</div>
+</div>
+<!-- Timeline Item: Success -->
+<div class="relative">
+<div class="absolute -left-6 w-6 h-6 rounded-full bg-[#1e1e1e] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+</div>
+<div class="bg-[#252526] border border-[#333333] rounded p-2.5 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-mono-metric font-mono-metric text-[12px] font-medium text-[#4ec9b0]">权限校验通过</span>
+<span class="text-[10px] bg-secondary/20 text-secondary border border-secondary/30 px-1.5 rounded">Success</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item: Executing / Needs Approval -->
+<div class="relative">
+<div class="absolute -left-6 w-6 h-6 rounded-full bg-[#1e1e1e] flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim animate-pulse"></div>
+</div>
+<div class="bg-[#252526] border border-[#ffb596]/50 rounded p-2.5 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-mono-metric font-mono-metric text-[12px] font-medium text-[#ce9178]">创建请假申请</span>
+<span class="text-[10px] bg-[#ffb596]/20 text-[#ffb596] border border-[#ffb596]/30 px-1.5 rounded animate-pulse">Executing</span>
+</div>
+<span class="text-mono-metric font-mono-metric text-[10px] text-[#858585]">Waiting for user confirmation...</span>
+<div class="mt-2 text-[10px] bg-[#333333] p-1.5 rounded border border-[#444444] text-[#d4d4d4] font-mono-metric">
+<span class="text-[#569cd6]">Status:</span> <span class="text-[#ce9178]">Needs Approval</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

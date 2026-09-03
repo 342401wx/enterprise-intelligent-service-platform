@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>企业工作台首页 - AI Workbench</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2ed",
+                        "on-surface": "#191b23",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface-variant": "#434655",
+                        "background": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-surface": "#2e3039",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#006a61",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-fixed-variant": "#005049",
+                        "secondary-fixed": "#89f5e7",
+                        "secondary-container": "#86f2e4",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-on-surface": "#f0f0fb",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Noto Sans SC"],
+                        "mono-metric": ["JetBrains Mono"],
+                        "display-lg": ["Noto Sans SC"],
+                        "body-md": ["Noto Sans SC"],
+                        "body-lg-mobile": ["Noto Sans SC"],
+                        "title-sm": ["Noto Sans SC"],
+                        "label-sm": ["Noto Sans SC"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-lg">
+<div class="text-title-sm font-title-sm font-bold text-on-surface">AI Workbench</div>
+<nav class="hidden md:flex items-center gap-md">
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-md py-sm rounded text-body-md font-body-md" href="#">Docs</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-md py-sm rounded text-body-md font-body-md" href="#">Support</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors px-md py-sm rounded text-body-md font-body-md" href="#">API</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary-container text-on-primary-container px-md py-sm rounded-lg text-label-sm font-label-sm font-medium hover:opacity-90 transition-opacity">
+                Create
+            </button>
+<div class="flex items-center gap-xs">
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-sm" data-alt="A small, professional headshot of an enterprise user, generic avatar style, neutral background, bright and clear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0-27xFYVa0qtrg71iKxpRSWoIXSqbjtxrTlzJy8VgQHyj5SER2SdLwuTl2dAQoRNTawQiM8LT__VfCKXZBdOif2k1QgNl2OHiV1UiFsGnPIZt49TGLdiJrVZBy4IoUF8iSKwktzkRML9YGLOS2QI6DAysdyoKnILbu_O2F6KXaDgBSIQkaxdMgBu2aXRAGoCGSjEX1ffEkTBbSvnBeR7Xy_Bya8QJY21rNeKQxMImrbrqz6PrUb0_"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-60 flex flex-col pt-16 pb-4 z-40 bg-surface-container-low border-r border-outline-variant hidden md:flex">
+<div class="p-lg border-b border-outline-variant mb-sm">
+<div class="flex items-center gap-md mb-md">
+<img alt="Enterprise Logo" class="w-10 h-10 rounded-md bg-surface-container-lowest object-cover" data-alt="A modern, abstract geometric logo for an enterprise technology company, utilizing shades of blue and stark white, clean lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7ra2ElRgCbo4leDeEXXjvalJUACmi9G96jFz1b_ps9hJMMW88t1MpQdquGmTiUr9dLeZEgT7BgXoDAqVjUF1fNl65amoSPIpusmXqFKamx3UcvXgG76cdKH_VP8DQYPzp7rUlMg-mDr0F-e40B20AHU1-vJNwMqTU8epFHy87RgYRbmuKhJXaisD1ey35J6vhUFOMzeNG0vwYqsqZaVLAjKPm14bN0NejBvhh2OI-jMlQCD0uX0qa"/>
+<div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">Global Admin</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant text-[10px]">Enterprise Tier</div>
+</div>
+</div>
+<button class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface px-md py-sm rounded text-label-sm font-label-sm hover:bg-surface-container-high transition-colors">
+                Upgrade Plan
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto py-sm">
+<!-- Active Tab: Workbench -->
+<a class="flex items-center gap-md px-lg py-sm text-primary bg-primary-container/10 border-l-4 border-primary font-bold transition-all duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-sm font-label-sm">Workbench</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-sm font-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+<span class="text-label-sm font-label-sm">My Applications</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-sm font-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="text-label-sm font-label-sm">Email</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-label-sm font-label-sm">File Gen</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="text-label-sm font-label-sm">Notifications</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-label-sm font-label-sm">Org & Permissions</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="text-label-sm font-label-sm">Model Config</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="text-label-sm font-label-sm">Monitoring</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-label-sm font-label-sm">Audit</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-sm font-label-sm">System Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-sm">
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-label-sm font-label-sm">Log Out</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="text-label-sm font-label-sm">Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="md:ml-60 pt-16 min-h-screen p-lg max-w-7xl mx-auto">
+<!-- Welcome Section -->
+<header class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="text-headline-md font-headline-md text-on-surface">早安，张建国 | 研发部</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-xs">2023年10月27日 星期五</p>
+</div>
+<div class="hidden sm:flex gap-md">
+<button class="bg-surface-container-lowest border border-outline-variant px-md py-sm rounded-lg text-label-sm font-label-sm flex items-center gap-xs hover:border-outline transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    新建知识库
+                </button>
+<button class="bg-primary-container text-on-primary-container px-md py-sm rounded-lg text-label-sm font-label-sm flex items-center gap-xs hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+                    唤起 AI 助手
+                </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Quick Stats -->
+<div class="col-span-12 grid grid-cols-2 md:grid-cols-4 gap-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg hover:border-outline transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant">待办审批</span>
+<span class="material-symbols-outlined text-outline">fact_check</span>
+</div>
+<div class="text-display-lg font-display-lg text-on-surface">3</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg hover:border-outline transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant">已完成 AI 任务</span>
+<span class="material-symbols-outlined text-outline">task_alt</span>
+</div>
+<div class="text-display-lg font-display-lg text-on-surface">128</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg hover:border-outline transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant">活跃知识库</span>
+<span class="material-symbols-outlined text-outline">database</span>
+</div>
+<div class="text-display-lg font-display-lg text-on-surface">5</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg hover:border-outline transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant">模型健康度</span>
+<span class="material-symbols-outlined text-secondary">monitor_heart</span>
+</div>
+<div class="text-display-lg font-display-lg text-secondary">100%</div>
+</div>
+</div>
+<!-- Recent Tasks & Notifications -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex-1 flex flex-col">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h2 class="text-title-sm font-title-sm text-on-surface">近期任务</h2>
+<button class="text-label-sm font-label-sm text-primary hover:underline">查看全部</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant text-label-sm font-label-sm">
+<th class="p-md font-medium">任务名称</th>
+<th class="p-md font-medium">类型</th>
+<th class="p-md font-medium">状态</th>
+<th class="p-md font-medium">时间</th>
+</tr>
+</thead>
+<tbody class="text-body-md font-body-md divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">分析 Q3 财报数据</td>
+<td class="p-md text-on-surface-variant">AI 助手会话</td>
+<td class="p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-secondary-container/30 text-secondary border border-secondary/20">
+                                            执行中
+                                        </span>
+</td>
+<td class="p-md text-on-surface-variant font-mono-metric">10:45 AM</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">研发中心采购申请</td>
+<td class="p-md text-on-surface-variant">待办审批</td>
+<td class="p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-surface-variant text-on-surface-variant border border-outline-variant">
+                                            等待中
+                                        </span>
+</td>
+<td class="p-md text-on-surface-variant font-mono-metric">09:30 AM</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">解析 '技术架构白皮书.pdf'</td>
+<td class="p-md text-on-surface-variant">文档处理</td>
+<td class="p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-primary-container/20 text-primary border border-primary/20">
+                                            成功
+                                        </span>
+</td>
+<td class="p-md text-on-surface-variant font-mono-metric">昨天 16:20</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">生成产品演示脚本</td>
+<td class="p-md text-on-surface-variant">内容生成</td>
+<td class="p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium bg-error-container/30 text-error border border-error/20">
+                                            失败
+                                        </span>
+</td>
+<td class="p-md text-on-surface-variant font-mono-metric">昨天 14:15</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Notifications Panel -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex-1">
+<div class="flex justify-between items-center mb-md">
+<h2 class="text-title-sm font-title-sm text-on-surface">通知中心</h2>
+<span class="material-symbols-outlined text-outline text-[20px]">notifications_active</span>
+</div>
+<div class="space-y-md">
+<div class="flex gap-md items-start p-sm hover:bg-surface-container-low rounded-lg transition-colors -mx-sm cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+<div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">模型版本更新 v2.4.1</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-xs line-clamp-2">GPT-4 Turbo 接口已升级，知识库检索速度提升 30%。</div>
+<div class="text-[10px] text-outline mt-unit font-mono-metric">1 小时前</div>
+</div>
+</div>
+<div class="flex gap-md items-start p-sm hover:bg-surface-container-low rounded-lg transition-colors -mx-sm cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-surface-variant mt-1.5 flex-shrink-0"></div>
+<div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">飞书消息同步完成</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-xs line-clamp-2">已成功同步来自“核心研发群”的 45 条关键技术讨论。</div>
+<div class="text-[10px] text-outline mt-unit font-mono-metric">3 小时前</div>
+</div>
+</div>
+<div class="flex gap-md items-start p-sm hover:bg-surface-container-low rounded-lg transition-colors -mx-sm cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-surface-variant mt-1.5 flex-shrink-0"></div>
+<div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">系统维护预告</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-xs line-clamp-2">本周六凌晨 2:00-4:00 将进行例行数据库维护，部分功能不可用。</div>
+<div class="text-[10px] text-outline mt-unit font-mono-metric">昨天</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- My Applications Grid -->
+<div class="col-span-12">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<h2 class="text-title-sm font-title-sm text-on-surface mb-lg">我的应用</h2>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-md">
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:border-primary hover:bg-primary-container/5 transition-all group" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-sm group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">smart_toy</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface">AI 助手</span>
+</a>
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:border-primary hover:bg-primary-container/5 transition-all group" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-sm group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">menu_book</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface">知识库管理</span>
+</a>
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:border-primary hover:bg-primary-container/5 transition-all group" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-sm group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">description</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface">文档解析</span>
+</a>
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:border-primary hover:bg-primary-container/5 transition-all group" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-sm group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">code</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface">代码生成器</span>
+</a>
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:border-primary hover:bg-primary-container/5 transition-all group" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-sm group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">bar_chart</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface">数据透视</span>
+</a>
+<a class="flex flex-col items-center justify-center p-md border border-outline-variant border-dashed rounded-lg hover:border-outline transition-all bg-surface/50" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-outline">add</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">添加应用</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,12 @@
+[
+  {"id":"usr-admin","name":"张建国","email":"zhang.jianguo@company.internal","department":"信息技术部","role":"admin","status":"active","supervisor_id":null},
+  {"id":"usr-manager","name":"王磊","email":"wang.lei@company.internal","department":"研发部","role":"manager","status":"active","supervisor_id":"usr-admin"},
+  {"id":"usr-hr-manager","name":"刘敏","email":"liu.min@company.internal","department":"人力资源部","role":"manager","status":"active","supervisor_id":"usr-admin"},
+  {"id":"usr-fin-manager","name":"赵海","email":"zhao.hai@company.internal","department":"财务部","role":"manager","status":"active","supervisor_id":"usr-admin"},
+  {"id":"usr-employee","name":"李晓雨","email":"li.xiaoyu@company.internal","department":"研发部","role":"employee","status":"active","supervisor_id":"usr-manager"},
+  {"id":"usr-hr-employee","name":"陈思远","email":"chen.siyuan@company.internal","department":"人力资源部","role":"employee","status":"active","supervisor_id":"usr-hr-manager"},
+  {"id":"usr-fin-employee","name":"周宁","email":"zhou.ning@company.internal","department":"财务部","role":"employee","status":"active","supervisor_id":"usr-fin-manager"},
+  {"id":"usr-market-employee","name":"林悦","email":"lin.yue@company.internal","department":"市场部","role":"employee","status":"active","supervisor_id":"usr-admin"},
+  {"id":"usr-product-employee","name":"许博","email":"xu.bo@company.internal","department":"产品部","role":"employee","status":"active","supervisor_id":"usr-admin"},
+  {"id":"usr-legal-employee","name":"高阳","email":"gao.yang@company.internal","department":"法务部","role":"employee","status":"active","supervisor_id":"usr-admin"}
+]

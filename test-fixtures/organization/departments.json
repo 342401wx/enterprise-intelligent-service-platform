@@ -1,0 +1,9 @@
+[
+  {"id":"dept-it","name":"信息技术部","manager_id":"usr-admin","parent_id":null,"status":"active"},
+  {"id":"dept-rd","name":"研发部","manager_id":"usr-manager","parent_id":null,"status":"active"},
+  {"id":"dept-hr","name":"人力资源部","manager_id":"usr-hr-manager","parent_id":null,"status":"active"},
+  {"id":"dept-fin","name":"财务部","manager_id":"usr-fin-manager","parent_id":null,"status":"active"},
+  {"id":"dept-market","name":"市场部","manager_id":null,"parent_id":null,"status":"active"},
+  {"id":"dept-product","name":"产品部","manager_id":null,"parent_id":null,"status":"active"},
+  {"id":"dept-legal","name":"法务部","manager_id":null,"parent_id":null,"status":"active"}
+]

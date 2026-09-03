@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>企业工作台首页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f3f3fe",
+                      "secondary": "#006a61",
+                      "surface-bright": "#faf8ff",
+                      "on-primary-fixed": "#00174b",
+                      "surface-dim": "#d9d9e5",
+                      "on-tertiary-container": "#ffede6",
+                      "surface-container-highest": "#e1e2ed",
+                      "on-primary-container": "#eeefff",
+                      "secondary-fixed": "#89f5e7",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f0f0fb",
+                      "inverse-surface": "#2e3039",
+                      "outline": "#737686",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "primary-fixed": "#dbe1ff",
+                      "on-surface": "#191b23",
+                      "on-surface-variant": "#434655",
+                      "on-secondary-fixed": "#00201d",
+                      "tertiary-container": "#bc4800",
+                      "on-secondary-fixed-variant": "#005049",
+                      "surface-container": "#ededf9",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "background": "#faf8ff",
+                      "on-background": "#191b23",
+                      "surface-tint": "#0053db",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e7e7f3",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "primary": "#004ac6",
+                      "surface": "#faf8ff",
+                      "on-secondary-container": "#006f66",
+                      "inverse-primary": "#b4c5ff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#2563eb",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbcd",
+                      "tertiary": "#943700",
+                      "surface-variant": "#e1e2ed",
+                      "secondary-container": "#86f2e4",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-tertiary-fixed": "#360f00",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Noto Sans SC"
+                      ],
+                      "body-lg-mobile": [
+                              "Noto Sans SC"
+                      ],
+                      "headline-md": [
+                              "Noto Sans SC"
+                      ],
+                      "body-md": [
+                              "Noto Sans SC"
+                      ],
+                      "display-lg": [
+                              "Noto Sans SC"
+                      ],
+                      "mono-metric": [
+                              "JetBrains Mono"
+                      ],
+                      "title-sm": [
+                              "Noto Sans SC"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg-mobile": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "mono-metric": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F9FAFB;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased bg-background">
+<!-- Top Navigation (Mobile Optimized) -->
+<header class="fixed top-0 left-0 right-0 h-16 bg-surface-container-lowest z-40 flex items-center justify-between px-margin-mobile md:px-lg border-b border-outline-variant md:hidden">
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors" id="mobile-menu-btn">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-title-sm font-title-sm text-primary font-bold">AI Portal</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full ml-sm object-cover border border-outline-variant" data-alt="A clean, professional corporate headshot of a business user in a modern office environment. The image should be bright and well-lit, suitable for an enterprise software avatar. Light mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCqvVJSUXYdj3oRkYbWP8sp4TcPNcS8FveR3htQ_Ptm6ZCHQU6AcJt98tTmdOHCfxroaWKR_Vm_h7z_OdSJyiO8EX2FNrAJMrvVksh43Lpay5xNmJdRDhNu3jgaFwx8_Hw9bi7wYZ-mrYPolL7DITfrKDpkXwd8vHM4gXaljOXFM4xOc8wAgYJEjDlOwxHJm0vc0FqN88aMsFt98a6Tyif5pHA70zDeSbG17hXqVpljPswvo0cxTPk"/>
+</div>
+</header>
+<!-- Mobile Navigation Drawer (Hidden by default) -->
+<div class="fixed inset-0 z-50 hidden md:hidden" id="mobile-nav-drawer">
+<div class="absolute inset-0 bg-on-surface opacity-50" id="mobile-nav-overlay"></div>
+<nav class="absolute top-0 left-0 bottom-0 w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-md overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out z-50" id="mobile-nav-menu">
+<div class="px-md pb-md mb-sm border-b border-outline-variant flex items-center justify-between">
+<div>
+<h2 class="text-title-sm font-title-sm text-on-surface">AI Service Portal</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Edition</p>
+</div>
+<button class="p-1 text-on-surface-variant" id="close-menu-btn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex flex-col px-sm gap-xs mt-sm">
+<a class="flex items-center gap-md px-md py-3 text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-label-sm font-label-sm">Workbench</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="text-label-sm font-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">apps</span>
+<span class="text-label-sm font-label-sm">Applications</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-label-sm font-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-label-sm font-label-sm">Monitoring</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-sm font-label-sm">System Settings</span>
+</a>
+</div>
+</nav>
+</div>
+<!-- Main Content Area -->
+<main class="pt-20 pb-24 px-margin-mobile min-h-screen">
+<!-- Header Section -->
+<div class="mb-lg">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-xs">早上好，工程部</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">这是您今天的工作概览</p>
+</div>
+<!-- Key Metrics Bento Grid (Mobile optimized vertically) -->
+<div class="grid grid-cols-2 gap-md mb-lg">
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05),_0px_2px_4px_-2px_rgba(0,0,0,0.05)] col-span-2">
+<div class="flex justify-between items-start mb-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">模型调用量 (今日)</span>
+<span class="material-symbols-outlined text-primary text-[20px]">trending_up</span>
+</div>
+<div class="text-display-lg font-display-lg text-on-surface mb-xs">24,592</div>
+<div class="flex items-center gap-xs text-secondary text-label-sm font-label-sm bg-secondary-fixed/20 inline-flex px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>12% 较昨日</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05),_0px_2px_4px_-2px_rgba(0,0,0,0.05)]">
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-sm">活跃任务</span>
+<div class="text-headline-md font-headline-md text-on-surface">18</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05),_0px_2px_4px_-2px_rgba(0,0,0,0.05)]">
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-sm">系统健康度</span>
+<div class="text-headline-md font-headline-md text-secondary">99.9%</div>
+</div>
+</div>
+<!-- Pending Tasks Card -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant mb-lg shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05),_0px_2px_4px_-2px_rgba(0,0,0,0.05)]">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-title-sm font-title-sm text-on-surface">待办任务</h3>
+<button class="text-label-sm font-label-sm text-primary">查看全部</button>
+</div>
+<div class="flex flex-col">
+<div class="p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors duration-150">
+<div class="flex items-start justify-between gap-sm mb-xs">
+<span class="text-body-md font-body-md text-on-surface font-medium line-clamp-1">审核 Q3 数据集更新计划</span>
+<span class="text-label-sm font-label-sm text-error bg-error-container px-2 py-1 rounded-md shrink-0">高优先级</span>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 截止: 今天 18:00
+                    </div>
+</div>
+<div class="p-md hover:bg-surface-container-low transition-colors duration-150">
+<div class="flex items-start justify-between gap-sm mb-xs">
+<span class="text-body-md font-body-md text-on-surface font-medium line-clamp-1">批准新知识库访问权限</span>
+<span class="text-label-sm font-label-sm text-secondary bg-secondary-fixed/20 px-2 py-1 rounded-md shrink-0">中等</span>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 截止: 明天 12:00
+                    </div>
+</div>
+</div>
+</div>
+<!-- Recent Conversations Card -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05),_0px_2px_4px_-2px_rgba(0,0,0,0.05)]">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-title-sm font-title-sm text-on-surface">最近 AI 对话</h3>
+<button class="text-label-sm font-label-sm text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">add</span> 新建
+                </button>
+</div>
+<div class="flex flex-col">
+<div class="p-md flex items-start gap-md border-b border-outline-variant hover:bg-surface-container-low transition-colors duration-150">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+</div>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface font-medium mb-xs">生成销售报告摘要</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant line-clamp-1 mb-sm">根据最新的 CRM 数据生成上周的销售表现摘要，重点关注...</p>
+<span class="text-label-sm font-label-sm text-outline">10 分钟前</span>
+</div>
+</div>
+<div class="p-md flex items-start gap-md hover:bg-surface-container-low transition-colors duration-150">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant">code</span>
+</div>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface font-medium mb-xs">Python 脚本性能优化</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant line-clamp-1 mb-sm">帮我分析这段代码的性能瓶颈并提供优化建议...</p>
+<span class="text-label-sm font-label-sm text-outline">2 小时前</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const overlay = document.getElementById('mobile-nav-overlay');
+        const drawer = document.getElementById('mobile-nav-drawer');
+        const navMenu = document.getElementById('mobile-nav-menu');
+
+        function openMenu() {
+            drawer.classList.remove('hidden');
+            // Small delay to allow display:block to apply before animating transform
+            setTimeout(() => {
+                navMenu.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeMenu() {
+            navMenu.classList.add('-translate-x-full');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300); // match duration-300
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+    </script>
+</body></html>

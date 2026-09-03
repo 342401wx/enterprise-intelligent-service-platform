@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Service Portal - 交互组件与状态库</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f3f3fe",
+                      "secondary": "#006a61",
+                      "surface-bright": "#faf8ff",
+                      "on-primary-fixed": "#00174b",
+                      "surface-dim": "#d9d9e5",
+                      "on-tertiary-container": "#ffede6",
+                      "surface-container-highest": "#e1e2ed",
+                      "on-primary-container": "#eeefff",
+                      "secondary-fixed": "#89f5e7",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f0f0fb",
+                      "inverse-surface": "#2e3039",
+                      "outline": "#737686",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "primary-fixed": "#dbe1ff",
+                      "on-surface": "#191b23",
+                      "on-surface-variant": "#434655",
+                      "on-secondary-fixed": "#00201d",
+                      "tertiary-container": "#bc4800",
+                      "on-secondary-fixed-variant": "#005049",
+                      "surface-container": "#ededf9",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "background": "#faf8ff",
+                      "on-background": "#191b23",
+                      "surface-tint": "#0053db",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e7e7f3",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "primary": "#004ac6",
+                      "surface": "#faf8ff",
+                      "on-secondary-container": "#006f66",
+                      "inverse-primary": "#b4c5ff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#2563eb",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbcd",
+                      "tertiary": "#943700",
+                      "surface-variant": "#e1e2ed",
+                      "secondary-container": "#86f2e4",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-tertiary-fixed": "#360f00",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Noto Sans SC"
+                      ],
+                      "body-lg-mobile": [
+                              "Noto Sans SC"
+                      ],
+                      "headline-md": [
+                              "Noto Sans SC"
+                      ],
+                      "body-md": [
+                              "Noto Sans SC"
+                      ],
+                      "display-lg": [
+                              "Noto Sans SC"
+                      ],
+                      "mono-metric": [
+                              "JetBrains Mono"
+                      ],
+                      "title-sm": [
+                              "Noto Sans SC"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg-mobile": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "mono-metric": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body { background-color: #F9FAFB; }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden min-h-screen">
+<!-- Top Navigation (Shell) -->
+<header class="fixed top-0 right-0 left-0 h-16 flex items-center justify-between px-lg z-40 bg-surface-container-lowest bg-opacity-90 backdrop-blur-none border-b border-outline-variant pl-60 md:pl-64 lg:pl-64 hidden md:flex transition-all duration-300">
+<div class="flex items-center gap-md">
+<h1 class="text-headline-md font-headline-md text-primary font-bold">AI Portal</h1>
+<div class="h-6 w-px bg-outline-variant mx-sm"></div>
+<nav class="flex gap-md">
+<a class="text-body-md font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Operations</a>
+<a class="text-body-md font-body-md text-primary border-b-2 border-primary pb-1" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-sm py-xs rounded-full">Department: Engineering</span>
+<div class="flex gap-sm">
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span></button>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-sm ml-sm shadow-sm cursor-pointer hover:ring-2 ring-primary transition-all">U</div>
+</div>
+</header>
+<!-- Side Navigation (Shell) -->
+<aside class="fixed left-0 top-0 h-screen w-60 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-md overflow-y-auto hidden md:flex z-50">
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-primary text-on-primary flex items-center justify-center font-bold text-title-sm font-title-sm">
+<span class="material-symbols-outlined" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<div>
+<h2 class="text-title-sm font-title-sm text-on-surface">AI Service Portal</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Edition</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs px-sm flex-grow">
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Workbench
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span> AI Assistant
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-all duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="apps">apps</span> Applications
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span> Knowledge Base
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span> Email
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span> File Gen
+             </a>
+<div class="h-px bg-outline-variant my-sm mx-md"></div>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span> Notifications
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span> Org &amp; Permissions
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span> Model Config
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span> Monitoring
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="rule">rule</span> Audit
+             </a>
+<a class="flex items-center gap-md px-md py-sm rounded-r-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> System Settings
+             </a>
+</nav>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-60 pt-16 min-h-screen p-margin-desktop md:p-margin-desktop p-margin-mobile flex flex-col gap-lg pb-32 max-w-[1600px] mx-auto">
+<header class="mb-md">
+<h2 class="text-display-lg font-display-lg text-on-surface mb-xs">组件交互与状态库</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">企业级应用标准组件模式展示，用于构建一致的高密度配置界面与复杂业务流。</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- 1. Document Upload & Progress -->
+<section class="col-span-1 md:col-span-6 lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">1. 知识库文档上传</h3>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-xl flex flex-col items-center justify-center text-center hover:bg-surface-container-low hover:border-primary transition-colors cursor-pointer bg-surface-bright">
+<span class="material-symbols-outlined text-[48px] text-outline mb-sm" data-icon="cloud_upload">cloud_upload</span>
+<p class="text-body-md font-body-md text-on-surface mb-xs font-semibold">点击或拖拽文件至此区域</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">支持 PDF, DOCX, TXT (最大 50MB)</p>
+</div>
+<div class="flex flex-col gap-sm mt-sm">
+<div class="flex items-center justify-between text-body-md font-body-md bg-surface-container p-sm rounded-md border border-outline-variant">
+<div class="flex items-center gap-sm overflow-hidden">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="truncate max-w-[150px] text-on-surface">q3_financial_report_v2.pdf</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">45%</span>
+<button class="text-outline hover:text-error transition-colors"><span class="material-symbols-outlined text-sm" data-icon="close">close</span></button>
+</div>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden -mt-1">
+<div class="bg-primary h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex items-center justify-between text-body-md font-body-md bg-surface-container p-sm rounded-md border border-outline-variant mt-sm">
+<div class="flex items-center gap-sm overflow-hidden">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="description">description</span>
+<span class="truncate max-w-[150px] text-on-surface">employee_handbook.docx</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span>
+<span class="text-label-sm font-label-sm text-secondary">已完成</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Approval Flow -->
+<section class="col-span-1 md:col-span-6 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">2. 模型发布审核流</h3>
+<div class="bg-surface-bright border border-outline-variant rounded-lg p-md">
+<div class="flex items-center justify-between mb-md">
+<div>
+<h4 class="text-body-md font-body-md font-semibold text-on-surface">GPT-4-Enterprise-Fin-v3</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">提交人: 李工 (工程部) | 2024-05-20 14:30</p>
+</div>
+<span class="bg-primary-container text-on-primary-container px-sm py-xs rounded-md text-label-sm font-label-sm font-bold flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="pending">pending</span> 审核中
+                        </span>
+</div>
+<div class="relative mt-lg pb-md pl-lg">
+<!-- Vertical Line -->
+<div class="absolute left-[11px] top-2 bottom-0 w-px bg-outline-variant"></div>
+<!-- Step 1 -->
+<div class="relative mb-lg flex items-start gap-md">
+<div class="absolute -left-[24px] w-6 h-6 rounded-full bg-secondary flex items-center justify-center border-2 border-surface-container-lowest z-10">
+<span class="material-symbols-outlined text-[12px] text-on-secondary" data-icon="check">check</span>
+</div>
+<div class="flex-grow bg-surface-container rounded-md p-sm border border-outline-variant -mt-1">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-body-md font-body-md font-semibold text-on-surface">安全扫描</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">自动化系统</span>
+</div>
+<p class="text-label-sm font-label-sm text-secondary flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]" data-icon="verified_user">verified_user</span> 未发现漏洞，依赖合规。</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative mb-lg flex items-start gap-md">
+<div class="absolute -left-[24px] w-6 h-6 rounded-full bg-primary flex items-center justify-center border-2 border-surface-container-lowest z-10 shadow-sm ring-2 ring-primary-fixed ring-opacity-50">
+<span class="material-symbols-outlined text-[12px] text-on-primary" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+<div class="flex-grow bg-surface-container-lowest rounded-md p-sm border border-primary shadow-sm -mt-1 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex justify-between items-center mb-xs pl-sm">
+<span class="text-body-md font-body-md font-semibold text-on-surface">架构组评审</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">张总监</span>
+</div>
+<div class="pl-sm flex gap-sm mt-sm">
+<button class="bg-primary hover:bg-primary-container text-on-primary px-md py-sm text-body-md font-body-md rounded-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="thumb_up">thumb_up</span> 批准
+                                     </button>
+<button class="bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface px-md py-sm text-body-md font-body-md rounded-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="thumb_down">thumb_down</span> 驳回
+                                     </button>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative flex items-start gap-md opacity-50">
+<div class="absolute -left-[24px] w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center border-2 border-surface-container-lowest z-10">
+<span class="material-symbols-outlined text-[12px] text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+<div class="flex-grow -mt-1">
+<div class="flex justify-between items-center">
+<span class="text-body-md font-body-md text-on-surface">生产环境部署</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">运维组</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Resource Selector -->
+<section class="col-span-1 md:col-span-6 lg:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">3. 计算资源分配器</h3>
+<div class="flex flex-col gap-md">
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-xs">目标集群</label>
+<div class="relative">
+<select class="block w-full border-outline-variant rounded-md shadow-sm focus:ring-primary focus:border-primary text-body-md font-body-md bg-surface-container-lowest appearance-none pr-xl py-sm px-md cursor-pointer">
+<option>华东-生产集群 (GPU x 128)</option>
+<option>华北-测试集群 (GPU x 32)</option>
+</select>
+<span class="absolute right-md top-1/2 -translate-y-1/2 material-symbols-outlined text-outline pointer-events-none" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="border border-outline-variant rounded-md p-md bg-surface-bright cursor-pointer hover:border-primary transition-colors flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="material-symbols-outlined text-on-surface" data-icon="memory">memory</span>
+<span class="text-label-sm font-label-sm bg-surface-container text-on-surface px-sm rounded-full">CPU</span>
+</div>
+<div>
+<div class="text-headline-md font-headline-md text-on-surface">16 <span class="text-body-md font-body-md text-on-surface-variant">Core</span></div>
+</div>
+</div>
+<div class="border-2 border-primary rounded-md p-md bg-surface-container-low cursor-pointer flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-0 h-0 border-t-[32px] border-l-[32px] border-t-primary border-l-transparent"></div>
+<span class="absolute top-[2px] right-[4px] material-symbols-outlined text-[14px] text-on-primary z-10" data-icon="check">check</span>
+<div class="flex justify-between items-start mb-sm">
+<span class="material-symbols-outlined text-primary" data-icon="developer_board">developer_board</span>
+<span class="text-label-sm font-label-sm bg-primary-container text-on-primary-container px-sm rounded-full">GPU</span>
+</div>
+<div>
+<div class="text-headline-md font-headline-md text-primary font-bold">A100 <span class="text-body-md font-body-md text-on-surface-variant">x 4</span></div>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-xs flex justify-between">
+<span>内存配额 (GB)</span>
+<span class="text-primary font-bold">128 GB</span>
+</label>
+<input class="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-primary" max="256" min="32" type="range" value="128"/>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-xs">
+<span>32</span>
+<span>128</span>
+<span>256</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Permission States -->
+<section class="col-span-1 md:col-span-6 lg:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">4. 权限隔离展示</h3>
+<div class="overflow-x-auto rounded-md border border-outline-variant">
+<table class="w-full text-left border-collapse text-body-md font-body-md">
+<thead class="bg-surface-container border-b border-outline-variant">
+<tr>
+<th class="p-sm font-semibold text-on-surface">操作角色</th>
+<th class="p-sm font-semibold text-on-surface">查看模型</th>
+<th class="p-sm font-semibold text-on-surface">配置权重</th>
+<th class="p-sm font-semibold text-on-surface">删除实例</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant bg-surface-container-lowest">
+<!-- Admin -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-sm font-semibold text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-error text-[18px]" data-icon="admin_panel_settings">admin_panel_settings</span> 管理员</td>
+<td class="p-sm"><button class="bg-surface-container text-on-surface px-md py-xs rounded hover:bg-surface-container-high transition-colors">查看</button></td>
+<td class="p-sm"><button class="bg-surface-container text-on-surface px-md py-xs rounded hover:bg-surface-container-high transition-colors">编辑</button></td>
+<td class="p-sm"><button class="bg-error text-on-error px-md py-xs rounded hover:bg-opacity-90 transition-colors">强制删除</button></td>
+</tr>
+<!-- Manager -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-sm font-semibold text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-primary text-[18px]" data-icon="manage_accounts">manage_accounts</span> 主管</td>
+<td class="p-sm"><button class="bg-surface-container text-on-surface px-md py-xs rounded hover:bg-surface-container-high transition-colors">查看</button></td>
+<td class="p-sm"><button class="bg-surface-container text-on-surface px-md py-xs rounded hover:bg-surface-container-high transition-colors">申请编辑</button></td>
+<td class="p-sm"><button class="bg-surface-container-high text-outline px-md py-xs rounded cursor-not-allowed flex items-center gap-xs opacity-70" disabled=""><span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span> 无权限</button></td>
+</tr>
+<!-- Employee -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-sm font-semibold text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-outline text-[18px]" data-icon="person">person</span> 普通员工</td>
+<td class="p-sm"><button class="bg-surface-container text-on-surface px-md py-xs rounded hover:bg-surface-container-high transition-colors">仅读</button></td>
+<td class="p-sm"><span class="text-outline text-label-sm font-label-sm italic">不可见</span></td>
+<td class="p-sm"><span class="text-outline text-label-sm font-label-sm italic">不可见</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- 5. Feedback States -->
+<section class="col-span-1 md:col-span-12 lg:col-span-12 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">5. 场景反馈状态</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-md">
+<!-- Loading -->
+<div class="border border-outline-variant rounded-lg p-md flex flex-col items-center justify-center bg-surface-bright text-center h-32">
+<div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mb-sm"></div>
+<span class="text-body-md font-body-md text-on-surface-variant">同步数据中...</span>
+</div>
+<!-- Empty -->
+<div class="border border-outline-variant border-dashed rounded-lg p-md flex flex-col items-center justify-center bg-surface-container-lowest text-center h-32">
+<span class="material-symbols-outlined text-outline text-[32px] mb-xs" data-icon="inbox">inbox</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">暂无可用模型，请先创建。</span>
+</div>
+<!-- Error & Retry -->
+<div class="border border-error-container rounded-lg p-md flex flex-col items-center justify-center bg-error-container bg-opacity-20 text-center h-32">
+<span class="material-symbols-outlined text-error text-[24px] mb-xs" data-icon="error">error</span>
+<span class="text-label-sm font-label-sm text-on-surface mb-sm">网络请求超时</span>
+<button class="bg-surface-container-lowest border border-error text-error px-md py-xs rounded text-label-sm font-label-sm hover:bg-error-container transition-colors">重试</button>
+</div>
+<!-- Success Chip -->
+<div class="border border-secondary-container rounded-lg p-md flex flex-col items-center justify-center bg-secondary-container bg-opacity-10 text-center h-32">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-xs shadow-sm">
+<span class="material-symbols-outlined" data-icon="done_all">done_all</span>
+</div>
+<span class="text-body-md font-body-md font-semibold text-secondary">配置已生效</span>
+</div>
+<!-- Permission Denied -->
+<div class="border border-outline-variant rounded-lg p-md flex flex-col items-center justify-center bg-surface-dim text-center h-32 relative overflow-hidden">
+<div class="absolute inset-0 bg-surface-container-lowest opacity-50 backdrop-blur-sm z-0"></div>
+<span class="material-symbols-outlined text-on-surface-variant text-[24px] mb-xs z-10" data-icon="block">block</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant z-10 font-bold">仅限超管访问</span>
+</div>
+</div>
+</section>
+<!-- 6. Email / Communication Components -->
+<section class="col-span-1 md:col-span-12 lg:col-span-12 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md">
+<h3 class="text-title-sm font-title-sm text-on-surface border-b border-outline-variant pb-sm">6. 内部通讯组件 (写信/通知)</h3>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Compose Email Modal Simulation -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg shadow-sm overflow-hidden flex flex-col">
+<div class="bg-surface-container px-md py-sm border-b border-outline-variant flex justify-between items-center">
+<span class="text-body-md font-body-md font-semibold text-on-surface">新邮件: 模型异常报告</span>
+<div class="flex gap-sm">
+<button class="text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="minimize">minimize</span></button>
+<button class="text-outline hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="close">close</span></button>
+</div>
+</div>
+<div class="p-md flex flex-col gap-sm flex-grow bg-surface-bright">
+<div class="flex items-center border-b border-outline-variant pb-xs">
+<span class="text-label-sm font-label-sm text-on-surface-variant w-12">收件人:</span>
+<div class="flex gap-xs flex-wrap">
+<span class="bg-surface-container text-on-surface text-label-sm font-label-sm px-sm py-xs rounded flex items-center gap-xs border border-outline-variant">运维组 <button class="hover:text-error"><span class="material-symbols-outlined text-[12px]" data-icon="close">close</span></button></span>
+<input class="border-none focus:ring-0 text-body-md font-body-md bg-transparent p-0 flex-grow min-w-[100px]" placeholder="添加联系人..." type="text"/>
+</div>
+</div>
+<div class="flex items-center border-b border-outline-variant pb-xs">
+<span class="text-label-sm font-label-sm text-on-surface-variant w-12">主题:</span>
+<input class="border-none focus:ring-0 text-body-md font-body-md bg-transparent p-0 flex-grow" type="text" value="[紧急] 生产环境 GPU 节点宕机"/>
+</div>
+<div class="flex-grow mt-sm relative h-32">
+<textarea class="w-full h-full border-none focus:ring-0 text-body-md font-body-md bg-transparent resize-none p-0" placeholder="正文...">节点 A-12 出现 OOM 错误，请求立即重启并排查日志。</textarea>
+</div>
+</div>
+<div class="bg-surface-container px-md py-sm border-t border-outline-variant flex justify-between items-center">
+<div class="flex gap-sm text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="format_bold">format_bold</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="attach_file">attach_file</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="insert_photo">insert_photo</span></button>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px] align-middle" data-icon="delete">delete</span> 丢弃</button>
+<button class="bg-primary hover:bg-primary-container text-on-primary px-xl py-sm rounded-md text-body-md font-body-md font-semibold transition-colors flex items-center gap-xs shadow-sm">
+                                     发送 <span class="material-symbols-outlined text-[16px]" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Email Status / Toast Notifications -->
+<div class="flex flex-col gap-md justify-center">
+<h4 class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">交互提示 (Toasts)</h4>
+<!-- Sending... -->
+<div class="bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-md shadow-md flex items-center justify-between animate-pulse max-w-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+<span class="text-body-md font-body-md">邮件发送中...</span>
+</div>
+<button class="text-inverse-primary text-label-sm font-label-sm font-bold uppercase hover:underline">撤销</button>
+</div>
+<!-- Success -->
+<div class="bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-md shadow-md flex items-center justify-between border-l-4 border-secondary max-w-sm transform translate-x-2 transition-transform">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px] text-secondary-fixed" data-icon="check_circle">check_circle</span>
+<span class="text-body-md font-body-md">审批意见已回复。</span>
+</div>
+</div>
+<!-- Error -->
+<div class="bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-md shadow-md flex flex-col gap-sm border-l-4 border-error max-w-sm">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-[18px] text-error mt-0.5" data-icon="warning">warning</span>
+<div>
+<span class="text-body-md font-body-md font-bold block mb-xs">发送失败</span>
+<span class="text-label-sm font-label-sm text-outline">附件体积超出 SMTP 服务器限制 (最大 20MB)。</span>
+</div>
+</div>
+<div class="flex justify-end gap-md">
+<button class="text-outline hover:text-inverse-on-surface text-label-sm font-label-sm transition-colors">取消</button>
+<button class="text-error font-bold text-label-sm font-label-sm hover:underline">重新编辑</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,26 @@
+# Runtime and secret data
+backend/data/
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.*
+!.env.example
+*.secret
+*.log
+
+# Local browser/test artifacts
+.playwright-cli/
+output/playwright/
+
+# Generated Office and local uploads
+backend/data/files/
+backend/data/generated/
+backend/data/email-attachments/
+# Dependencies and build output
+node_modules/
+dist/
+tsconfig.tsbuildinfo
+output/
+__pycache__/
+*.pyc

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>通知中心 - AI Service Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f3f3fe",
+                      "secondary": "#006a61",
+                      "surface-bright": "#faf8ff",
+                      "on-primary-fixed": "#00174b",
+                      "surface-dim": "#d9d9e5",
+                      "on-tertiary-container": "#ffede6",
+                      "surface-container-highest": "#e1e2ed",
+                      "on-primary-container": "#eeefff",
+                      "secondary-fixed": "#89f5e7",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f0f0fb",
+                      "inverse-surface": "#2e3039",
+                      "outline": "#737686",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "primary-fixed": "#dbe1ff",
+                      "on-surface": "#191b23",
+                      "on-surface-variant": "#434655",
+                      "on-secondary-fixed": "#00201d",
+                      "tertiary-container": "#bc4800",
+                      "on-secondary-fixed-variant": "#005049",
+                      "surface-container": "#ededf9",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "background": "#faf8ff",
+                      "on-background": "#191b23",
+                      "surface-tint": "#0053db",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e7e7f3",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "primary": "#004ac6",
+                      "surface": "#faf8ff",
+                      "on-secondary-container": "#006f66",
+                      "inverse-primary": "#b4c5ff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#2563eb",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdbcd",
+                      "tertiary": "#943700",
+                      "surface-variant": "#e1e2ed",
+                      "secondary-container": "#86f2e4",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-tertiary-fixed": "#360f00",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Noto Sans SC"
+                      ],
+                      "body-lg-mobile": [
+                              "Noto Sans SC"
+                      ],
+                      "headline-md": [
+                              "Noto Sans SC"
+                      ],
+                      "body-md": [
+                              "Noto Sans SC"
+                      ],
+                      "display-lg": [
+                              "Noto Sans SC"
+                      ],
+                      "mono-metric": [
+                              "JetBrains Mono"
+                      ],
+                      "title-sm": [
+                              "Noto Sans SC"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg-mobile": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "mono-metric": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 h-16 flex items-center justify-between px-lg z-40 bg-opacity-90 backdrop-blur-none bg-surface-container-lowest border-b border-outline-variant pl-60">
+<div class="flex items-center gap-md">
+<h1 class="text-headline-md font-headline-md text-primary font-bold tracking-tight">AI Portal</h1>
+<div class="h-6 w-[1px] bg-outline-variant mx-sm"></div>
+<nav class="flex gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Operations</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Department: Engineering</span>
+<div class="flex gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-DEFAULT transition-colors" title="help">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-xs text-primary hover:bg-surface-container-high rounded-DEFAULT transition-colors relative" title="notifications">
+<span class="material-symbols-outlined" data-icon="notifications" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-DEFAULT transition-colors" title="dark_mode">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A professional corporate headshot of a user avatar, minimal grey background, subtle lighting, sharp focus, capturing a modern enterprise user profile picture aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCXG2cG60hbnRjA1kh33Aw-_r2yJAChd9pWsS8D6NWmynmiKZklTirDUrU1nMv5DA6rlVEGVT2VSCZXNuWfjkTRcyGN1hrDKkuYLknBEkAU6YZFowXl41cSIiKSxwkC4ix9PQ55nu-T_z_A15sIE4ILJ7mZtsAyDktj7CEXE2H75yauiQdeyISsh3T58FRBnSkpGXL8Qwpo-mFfneqi7jWgeZKaSzkncPsSQvtIUfY8HivNljIiwdy"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-md overflow-y-auto bg-surface-container-lowest border-r border-outline-variant w-60 z-50">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="corporate_fare">corporate_fare</span>
+<span class="text-title-sm font-title-sm text-on-surface">AI Service Portal</span>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant ml-8">Enterprise Edition</div>
+</div>
+<nav class="flex-1 px-sm space-y-unit">
+<!-- Navigation Items -->
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-label-sm font-label-sm">Workbench</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-sm font-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="apps">apps</span>
+<span class="text-label-sm font-label-sm">Applications</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="menu_book">menu_book</span>
+<span class="text-label-sm font-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
+<span class="text-label-sm font-label-sm">Email</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="description">description</span>
+<span class="text-label-sm font-label-sm">File Gen</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="text-label-sm font-label-sm">Notifications</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="text-label-sm font-label-sm">Org &amp; Permissions</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings_input_component">settings_input_component</span>
+<span class="text-label-sm font-label-sm">Model Config</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="monitoring">monitoring</span>
+<span class="text-label-sm font-label-sm">Monitoring</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="rule">rule</span>
+<span class="text-label-sm font-label-sm">Audit</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-label-sm font-label-sm">System Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-60 mt-16 p-lg h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+<!-- Header -->
+<div class="flex justify-between items-center mb-md flex-shrink-0">
+<h2 class="text-headline-md font-headline-md text-on-surface tracking-tight">通知中心</h2>
+<div class="flex gap-sm">
+<button class="px-md py-sm text-label-sm font-label-sm text-on-surface bg-surface-container-lowest border border-outline-variant hover:bg-surface-container-high transition-colors rounded-DEFAULT flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="done_all">done_all</span>
+                    全部标为已读
+                </button>
+<button class="px-md py-sm text-label-sm font-label-sm text-on-surface bg-surface-container-lowest border border-outline-variant hover:bg-surface-container-high transition-colors rounded-DEFAULT flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="settings">settings</span>
+                    通知设置
+                </button>
+</div>
+</div>
+<!-- Filter & Layout Container -->
+<div class="flex-1 flex gap-md overflow-hidden bg-surface-container-lowest rounded-lg border border-outline-variant">
+<!-- List Panel -->
+<div class="w-1/3 flex flex-col border-r border-outline-variant bg-surface-bright">
+<!-- Filters -->
+<div class="p-md border-b border-outline-variant flex-shrink-0">
+<div class="flex gap-sm mb-md overflow-x-auto pb-xs">
+<button class="px-sm py-xs bg-primary-container text-on-primary rounded-md text-label-sm font-label-sm whitespace-nowrap">全部 (12)</button>
+<button class="px-sm py-xs bg-surface-container hover:bg-surface-container-high text-on-surface rounded-md text-label-sm font-label-sm border border-outline-variant whitespace-nowrap transition-colors">系统公告 (1)</button>
+<button class="px-sm py-xs bg-surface-container hover:bg-surface-container-high text-on-surface rounded-md text-label-sm font-label-sm border border-outline-variant whitespace-nowrap transition-colors flex items-center gap-1">审批待办 <span class="w-2 h-2 rounded-full bg-error"></span></button>
+<button class="px-sm py-xs bg-surface-container hover:bg-surface-container-high text-on-surface rounded-md text-label-sm font-label-sm border border-outline-variant whitespace-nowrap transition-colors">工作流提醒</button>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<div class="flex gap-md text-on-surface-variant">
+<label class="flex items-center gap-xs cursor-pointer hover:text-primary">
+<input checked="" class="form-radio text-primary border-outline-variant focus:ring-primary h-3 w-3" name="read_status" type="radio"/> 全部
+                            </label>
+<label class="flex items-center gap-xs cursor-pointer hover:text-primary">
+<input class="form-radio text-primary border-outline-variant focus:ring-primary h-3 w-3" name="read_status" type="radio"/> 仅未读
+                            </label>
+</div>
+<div class="relative w-48">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-outline-variant text-[16px]" data-icon="search">search</span>
+<input class="w-full pl-8 pr-2 py-1 text-label-sm font-label-sm border border-outline-variant rounded-DEFAULT focus:border-primary focus:ring-1 focus:ring-primary-fixed-dim bg-surface-container-lowest" placeholder="搜索通知..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Notification List -->
+<div class="flex-1 overflow-y-auto p-xs space-y-xs">
+<!-- Item 1: Active/Unread Approval -->
+<div class="p-sm rounded-DEFAULT bg-surface-container-low border border-primary-fixed-dim cursor-pointer relative group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-DEFAULT"></div>
+<div class="pl-xs">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-xs">
+<span class="px-1.5 py-0.5 bg-[#FFF3E0] text-[#E65100] text-[10px] font-label-sm rounded-sm border border-[#FFE0B2]">审批</span>
+<span class="text-title-sm font-title-sm text-on-surface truncate pr-2">LLM 模型部署申请 (V2.1.4) 需要您的审批</span>
+</div>
+<span class="text-[11px] text-on-surface-variant whitespace-nowrap">10 分钟前</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant truncate mb-xs">工程部提交了新的生产环境模型部署请求，包含性能压测报告。</p>
+<div class="flex gap-xs text-mono-metric font-mono-metric text-outline">
+<span>#task_9482A</span>
+</div>
+</div>
+</div>
+<!-- Item 2: Read System -->
+<div class="p-sm rounded-DEFAULT hover:bg-surface-container-low border border-transparent hover:border-outline-variant cursor-pointer transition-colors group">
+<div class="pl-xs">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-xs">
+<span class="px-1.5 py-0.5 bg-surface-container-highest text-on-surface-variant text-[10px] font-label-sm rounded-sm border border-outline-variant">系统</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium truncate pr-2">平台维护升级完成通知</span>
+</div>
+<span class="text-[11px] text-outline-variant whitespace-nowrap">今天 08:30</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline-variant truncate mb-xs">核心推理集群已于 08:00 完成扩容并恢复服务。</p>
+<div class="flex gap-xs text-mono-metric font-mono-metric text-outline-variant opacity-70">
+<span>#sys_maint_22</span>
+</div>
+</div>
+</div>
+<!-- Item 3: Unread Workflow -->
+<div class="p-sm rounded-DEFAULT hover:bg-surface-container-low border border-transparent hover:border-outline-variant cursor-pointer transition-colors relative group">
+<div class="absolute left-1 top-2.5 w-1.5 h-1.5 bg-primary rounded-full"></div>
+<div class="pl-md">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-xs">
+<span class="px-1.5 py-0.5 bg-[#E8F5E9] text-[#2E7D32] text-[10px] font-label-sm rounded-sm border border-[#C8E6C9]">工作</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium truncate pr-2">知识库 "Q3 财务合规" 构建完成</span>
+</div>
+<span class="text-[11px] text-on-surface-variant whitespace-nowrap">昨天 16:45</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant truncate mb-xs">文档解析完成，共处理 1,245 页，生成 8,432 个向量片段。</p>
+<div class="flex gap-xs text-mono-metric font-mono-metric text-outline">
+<span>#job_kb_7741</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Panel (Preview) -->
+<div class="w-2/3 flex flex-col bg-surface-container-lowest p-lg overflow-y-auto">
+<div class="max-w-3xl mx-auto w-full">
+<!-- Header -->
+<div class="mb-lg pb-md border-b border-outline-variant">
+<div class="flex items-center gap-sm mb-sm">
+<span class="px-2 py-1 bg-[#FFF3E0] text-[#E65100] text-label-sm font-label-sm rounded-md border border-[#FFE0B2]">审批待办</span>
+<span class="text-mono-metric font-mono-metric text-outline bg-surface-container px-2 py-0.5 rounded-sm">task_9482A</span>
+<span class="ml-auto text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+                                2023-10-24 14:30:22
+                            </span>
+</div>
+<h3 class="text-display-lg font-display-lg text-on-surface mb-sm">LLM 模型部署申请 (V2.1.4) 需要您的审批</h3>
+<div class="flex items-center gap-sm text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex items-center gap-1">
+<img alt="avatar" class="w-4 h-4 rounded-full" data-alt="A small generic user avatar for an engineering department employee, professional and subtle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZtDul5WWBV1MT7oDj-Ni5E0Ss0W9YIbFVcsB4yQp84dpYqlmDhPW_G4e5ytEcXP6bKfnd5Higd5n4Nl6F2LvHJxHCRImMg2NRsKGXIKdXnE68ud7lciY2kEUpuX5IhKOWGy6N2UngZ--oN4cjR8HAC9Jw8n1PmBzMf9_CkAqsOG9Bq7O_rfBCg-exJAOcqrUzPFItqIq4Hrc7zPq2re6WQs9gppM5xf85aXl728bB5yjlfiqrW-vu"/>
+<span>提交人: 张三 (工程部)</span>
+</div>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>目标环境: Production (Cluster-A)</span>
+</div>
+</div>
+<!-- Body -->
+<div class="prose prose-sm max-w-none text-body-md font-body-md text-on-surface space-y-md">
+<p>您好，</p>
+<p>工程部提交了一份新的模型部署请求。请审核以下详细信息并在 24 小时内做出批复，以确保 Q4 核心业务迭代按计划上线。</p>
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant font-mono-metric text-mono-metric mt-md mb-md">
+<div class="grid grid-cols-3 gap-y-sm">
+<div class="text-outline-variant">模型名称:</div>
+<div class="col-span-2 text-on-surface font-medium">Enterprise-Chat-72B-Instruct</div>
+<div class="text-outline-variant">版本号:</div>
+<div class="col-span-2 text-on-surface">V2.1.4 (Delta from V2.1.3)</div>
+<div class="text-outline-variant">资源预估:</div>
+<div class="col-span-2 text-on-surface">8x A100 80GB (Minimum), 128GB RAM</div>
+<div class="text-outline-variant">关联对话:</div>
+<div class="col-span-2 text-primary hover:underline cursor-pointer">conv_88f2a9_eval</div>
+</div>
+</div>
+<h4 class="text-title-sm font-title-sm font-bold mt-lg mb-sm">评估报告摘要</h4>
+<ul class="list-disc pl-5 space-y-xs text-on-surface-variant">
+<li><strong>准确率提升:</strong> 相比基线版本 (V2.1.0)，在内部财务合规测试集上通过率提升 14.2%。</li>
+<li><strong>延迟:</strong> 首字延迟 (TTFT) 增加约 45ms，仍在 200ms 的 SLA 范围内。</li>
+<li><strong>安全对齐:</strong> 已通过红蓝对抗测试，越狱成功率低于 0.01%。</li>
+</ul>
+</div>
+<!-- Actions -->
+<div class="mt-xl pt-lg border-t border-outline-variant flex gap-md">
+<button class="px-xl py-sm bg-primary-container text-on-primary rounded-DEFAULT text-label-sm font-label-sm font-medium hover:bg-on-primary-fixed-variant transition-colors shadow-sm">
+                            同意部署
+                        </button>
+<button class="px-xl py-sm bg-surface-container-lowest border border-error text-error rounded-DEFAULT text-label-sm font-label-sm font-medium hover:bg-error-container transition-colors">
+                            拒绝并退回
+                        </button>
+<button class="px-lg py-sm ml-auto bg-surface-container text-on-surface border border-outline-variant rounded-DEFAULT text-label-sm font-label-sm hover:bg-surface-container-high transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="forum">forum</span>
+                            发起讨论
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

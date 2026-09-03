@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model API Config</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2ed",
+                        "on-surface": "#191b23",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface-variant": "#434655",
+                        "background": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-surface": "#2e3039",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#006a61",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-fixed-variant": "#005049",
+                        "secondary-fixed": "#89f5e7",
+                        "secondary-container": "#86f2e4",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-on-surface": "#f0f0fb",
+                        "primary-container": "#2563eb",
+                        "on-background": "#191b23",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Noto Sans SC", "sans-serif"],
+                        "mono-metric": ["JetBrains Mono", "monospace"],
+                        "display-lg": ["Noto Sans SC", "sans-serif"],
+                        "body-md": ["Noto Sans SC", "sans-serif"],
+                        "body-lg-mobile": ["Noto Sans SC", "sans-serif"],
+                        "title-sm": ["Noto Sans SC", "sans-serif"],
+                        "label-sm": ["Noto Sans SC", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Noto Sans SC', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased flex flex-col md:flex-row min-h-screen">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant fixed left-0 top-0 h-full w-60 pt-16 pb-4 z-40">
+<div class="px-md mb-lg">
+<h2 class="text-headline-md font-headline-md font-extrabold text-primary">Global Admin</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Tier</p>
+</div>
+<div class="flex-1 overflow-y-auto px-sm space-y-1">
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-body-md font-body-md">Workbench</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+<span class="text-body-md font-body-md">AI Assistant</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">apps</span>
+<span class="text-body-md font-body-md">My Applications</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+<span class="text-body-md font-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+<span class="text-body-md font-body-md">Email</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span class="text-body-md font-body-md">File Gen</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="text-body-md font-body-md">Notifications</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="text-body-md font-body-md">Org &amp; Permissions</span>
+</a>
+<!-- Active: Model Config -->
+<a class="flex items-center gap-md px-md py-sm rounded-md text-primary bg-primary-container/10 border-l-4 border-primary font-bold scale-95 duration-75" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span class="text-body-md font-body-md">Model Config</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+<span class="text-body-md font-body-md">Monitoring</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-body-md font-body-md">Audit</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-body-md font-body-md">System Settings</span>
+</a>
+</div>
+<div class="px-md mt-auto pt-md space-y-sm">
+<button class="w-full py-2 px-4 bg-primary text-on-primary rounded-md text-label-sm font-label-sm hover:opacity-90 transition-opacity">Upgrade Plan</button>
+<div class="pt-sm border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-md px-md py-xs rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="text-label-sm font-label-sm">Log Out</span>
+</a>
+<a class="flex items-center gap-md px-md py-xs rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span class="text-label-sm font-label-sm">Help</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-60 pt-16 md:pt-0 min-h-screen bg-background">
+<!-- TopNavBar (Mobile only in this layout context for simplicity, but adhering to the TopNavBar JSON structure at the top) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface border-b border-outline-variant md:ml-60 md:w-[calc(100%-240px)]">
+<div class="flex items-center gap-lg">
+<span class="text-title-sm font-title-sm font-bold text-on-surface">AI Workbench</span>
+<div class="hidden lg:flex gap-md">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded" href="#">Docs</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded" href="#">Support</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container-high transition-colors px-2 py-1 rounded" href="#">API</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex gap-sm">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined">settings</span></button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined">help</span></button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-md text-label-sm font-label-sm hover:opacity-90">Create</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A small circular user profile placeholder image, minimalist grey silhouette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEnp6SgW9BTKh0RJd167WGneiprSc11b3T8lce75PYmjGhxk_o6lsihjkL-dtsPrUTvb7JXiqyVT-v7fGfLeXNuQRj_rlDFZQ1VycdQwAgvNNEr6Up_U73jSIWl0H80mAhJSGuYaO_kqso6nnbZqs5jxLdMctE_cgjttzdL3AypYErRRlPvciPG1POmmGdcp63hjPq8R6V2TgX4gOjC3cbpKgTrD0yBRrblVpMLZWqNre-68nLiNRw"/>
+</div>
+</header>
+<div class="p-margin-desktop pt-24 max-w-7xl mx-auto">
+<div class="mb-lg">
+<h1 class="text-display-lg font-display-lg text-on-surface mb-sm">Model API Configuration</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Manage connection settings, authentication, and routing for external AI model providers.</p>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant mb-lg">
+<button class="px-lg py-sm text-label-sm font-label-sm text-primary border-b-2 border-primary">Global Config</button>
+<button class="px-lg py-sm text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors">Independent Config</button>
+</div>
+<!-- Config Form / Bento Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-lg">
+<!-- Main Form Area (Spans 8 cols on xl) -->
+<div class="xl:col-span-8 space-y-lg">
+<!-- Provider Settings Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-sm">
+<h3 class="text-title-sm font-title-sm text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px] text-primary">dns</span>
+                                Provider Details
+                            </h3>
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded text-label-sm font-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">link</span> Inherited from Global
+                            </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface">Provider</label>
+<select class="w-full px-3 py-2 bg-surface border border-outline-variant rounded-md text-body-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-shadow">
+<option>OpenAI</option>
+<option>Anthropic</option>
+<option>Azure OpenAI</option>
+<option>Custom Endpoint</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface">Model Name</label>
+<input class="w-full px-3 py-2 bg-surface border border-outline-variant rounded-md text-body-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-shadow" type="text" value="gpt-4-turbo-preview"/>
+</div>
+<div class="flex flex-col gap-xs md:col-span-2">
+<label class="text-label-sm font-label-sm text-on-surface">Base API URL</label>
+<input class="w-full px-3 py-2 bg-surface border border-outline-variant rounded-md text-mono-metric font-mono-metric text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-shadow" type="text" value="https://api.openai.com/v1"/>
+</div>
+</div>
+</div>
+<!-- Authentication Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-sm">
+<h3 class="text-title-sm font-title-sm text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px] text-error">key</span>
+                                Authentication
+                            </h3>
+<span class="px-2 py-1 bg-surface-container-high text-on-surface-variant rounded text-label-sm font-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">edit</span> Overridden
+                            </span>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface">API Key</label>
+<div class="relative">
+<input class="w-full px-3 py-2 pr-10 bg-surface border border-outline-variant rounded-md text-mono-metric font-mono-metric text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-shadow" type="password" value="sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">visibility_off</span>
+</button>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-1">Stored securely in environment vault.</p>
+</div>
+</div>
+</div>
+<!-- Side Panel (Spans 4 cols on xl) -->
+<div class="xl:col-span-4 space-y-lg">
+<!-- Execution Params -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<h3 class="text-title-sm font-title-sm text-on-surface mb-md border-b border-outline-variant pb-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
+                            Execution Parameters
+                        </h3>
+<div class="space-y-md">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between">
+<label class="text-label-sm font-label-sm text-on-surface">Timeout (ms)</label>
+<span class="text-label-sm font-mono-metric text-on-surface-variant">30000</span>
+</div>
+<input class="w-full accent-primary h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="60000" min="1000" type="range" value="30000"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface">Max Retries</label>
+<input class="w-full px-3 py-2 bg-surface border border-outline-variant rounded-md text-body-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim outline-none transition-shadow" type="number" value="3"/>
+</div>
+<div class="flex items-center justify-between pt-sm">
+<label class="text-label-sm font-label-sm text-on-surface">Stream Responses</label>
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-primary bg-primary checked:right-0 right-5" id="toggle" name="toggle" style="border-color: #2563eb;" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary-fixed-dim cursor-pointer" for="toggle"></label>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-lg shadow-sm flex flex-col gap-md">
+<button class="w-full flex justify-center items-center gap-sm py-2 px-4 bg-surface-container-highest border border-outline-variant text-on-surface rounded-md text-label-sm font-label-sm hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">cell_tower</span>
+                            Test Connection
+                        </button>
+<div class="flex gap-md">
+<button class="flex-1 py-2 px-4 bg-primary text-on-primary rounded-md text-label-sm font-label-sm hover:opacity-90 transition-opacity font-bold">
+                                Save Config
+                            </button>
+<button class="flex-none py-2 px-4 bg-error-container text-on-error-container border border-error-container rounded-md text-label-sm font-label-sm hover:bg-error/20 transition-colors">
+                                Disable
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

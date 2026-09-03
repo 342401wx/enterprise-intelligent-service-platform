@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Office 文件生成与文件历史</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3fe",
+                        "secondary": "#006a61",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "secondary-fixed": "#89f5e7",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "inverse-surface": "#2e3039",
+                        "outline": "#737686",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed": "#dbe1ff",
+                        "on-surface": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-container": "#bc4800",
+                        "on-secondary-fixed-variant": "#005049",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "background": "#faf8ff",
+                        "on-background": "#191b23",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e7e7f3",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "surface": "#faf8ff",
+                        "on-secondary-container": "#006f66",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#2563eb",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary": "#943700",
+                        "surface-variant": "#e1e2ed",
+                        "secondary-container": "#86f2e4",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Noto Sans SC", "sans-serif"],
+                        "body-lg-mobile": ["Noto Sans SC", "sans-serif"],
+                        "headline-md": ["Noto Sans SC", "sans-serif"],
+                        "body-md": ["Noto Sans SC", "sans-serif"],
+                        "display-lg": ["Noto Sans SC", "sans-serif"],
+                        "mono-metric": ["JetBrains Mono", "monospace"],
+                        "title-sm": ["Noto Sans SC", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg-mobile": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-metric": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden flex font-sans antialiased">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col py-md overflow-y-auto bg-surface-container-lowest dark:bg-surface-dim border-r border-outline-variant dark:border-outline docked h-screen w-60 z-50">
+<div class="px-md pb-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container text-on-primary flex items-center justify-center font-bold text-lg">AI</div>
+<div>
+<h1 class="text-title-sm font-title-sm text-on-surface dark:text-on-surface-variant font-bold">AI Service Portal</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Enterprise Edition</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col flex-1 px-sm gap-xs">
+<!-- Navigation Items -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+                Workbench
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">smart_toy</span>
+                AI Assistant
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">apps</span>
+                Applications
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+                Knowledge Base
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">mail</span>
+                Email
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed bg-surface-container-low dark:bg-surface-container-highest transition-all text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+                File Gen
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+                Notifications
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">group</span>
+                Org &amp; Permissions
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings_input_component</span>
+                Model Config
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">monitoring</span>
+                Monitoring
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">rule</span>
+                Audit
+            </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container transition-colors duration-150 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+                System Settings
+            </a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 h-16 flex items-center justify-between px-lg z-40 bg-surface-container-lowest dark:bg-surface-dim bg-opacity-90 backdrop-blur-none border-b border-outline-variant dark:border-outline pl-60 ml-60 transition-all">
+<div class="flex items-center gap-lg">
+<h2 class="text-headline-md font-headline-md text-primary dark:text-primary-fixed font-bold tracking-tight">AI Portal</h2>
+<div class="hidden md:flex gap-md">
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Operations</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-sm py-xs rounded">Department: Engineering</span>
+<div class="flex items-center gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+</div>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-sm" data-alt="A professional headshot of a corporate user, modern corporate style, bright lighting, realistic, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCemxGt3eqOxx38D0NpPLJ-RJhca22IluJDkCrR7kbio9FSiVcnLfksznz54zROXouhhpNl1mrf2-P7nmi4srEKlJ6lFBw9-aqKj0Sz311ZjpZLmCb5Jk2JpyRYWNruZey2iF-pyynTaj7LcClJIwemsN_5TjewMzQ2vA-eYdH-WGGLSbXSL-B9z-wMdo48blY4VRPlXGYSgrw1vyM-8vhh1PxLSZnP1ws5xiG5_i11sLG_o1ixxGqr"/>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 ml-60 mt-16 p-lg h-[calc(100vh-4rem)] overflow-y-auto bg-background">
+<div class="max-w-[1600px] mx-auto h-full flex flex-col md:flex-row gap-lg">
+<!-- Left Panel: File Generation Configuration -->
+<section class="w-full md:w-[400px] xl:w-[480px] shrink-0 flex flex-col gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm flex flex-col h-full">
+<div class="mb-lg">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-xs">文件生成配置</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">选择模板并配置参数以生成 Office 文件。</p>
+</div>
+<form class="flex-1 flex flex-col gap-lg overflow-y-auto pr-sm scrollbar-hide">
+<!-- Template Selection -->
+<div class="flex flex-col gap-sm">
+<label class="text-label-sm font-label-sm text-on-surface">选择模板</label>
+<div class="relative">
+<select class="w-full h-10 px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim appearance-none">
+<option value="weekly_report">项目周报模板 (Word)</option>
+<option value="financial_summary">财务汇总表 (Excel)</option>
+<option value="pitch_deck">产品介绍 PPT (PowerPoint)</option>
+<option value="contract">标准服务合同 (Word)</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<!-- Data Source Selection -->
+<div class="flex flex-col gap-sm">
+<label class="text-label-sm font-label-sm text-on-surface">关联数据源 / 会话</label>
+<div class="relative">
+<select class="w-full h-10 px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim appearance-none">
+<option value="conv_8892">会话: Q3 营销计划讨论 (conv_8892)</option>
+<option value="conv_8891">会话: 客户反馈分析 (conv_8891)</option>
+<option value="custom">手动输入 JSON 数据</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<!-- Parameter Inputs (Dynamic based on template) -->
+<div class="bg-surface-container rounded-lg p-md border border-outline-variant/50">
+<h4 class="text-label-sm font-label-sm text-on-surface font-bold mb-md">模板参数</h4>
+<div class="flex flex-col gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface-variant">项目名称</label>
+<input class="w-full px-sm py-xs bg-surface-container-lowest border border-outline-variant rounded text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim" placeholder="输入项目名称" type="text"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface-variant">报告周期</label>
+<div class="flex gap-sm">
+<input class="w-full px-sm py-xs bg-surface-container-lowest border border-outline-variant rounded text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim text-on-surface-variant" type="date"/>
+<span class="self-center text-on-surface-variant">-</span>
+<input class="w-full px-sm py-xs bg-surface-container-lowest border border-outline-variant rounded text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim text-on-surface-variant" type="date"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-sm font-label-sm text-on-surface-variant">附加说明 (可选)</label>
+<textarea class="w-full px-sm py-xs bg-surface-container-lowest border border-outline-variant rounded text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-fixed-dim resize-none" placeholder="输入需要补充到文档中的额外信息..." rows="3"></textarea>
+</div>
+</div>
+</div>
+</form>
+<div class="pt-lg mt-auto border-t border-outline-variant">
+<button class="w-full bg-primary-container text-on-primary py-sm rounded-lg font-label-sm text-label-sm font-bold flex items-center justify-center gap-xs hover:bg-primary transition-colors hover:shadow-md">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+                            开始生成文件
+                        </button>
+</div>
+</div>
+</section>
+<!-- Right Panel: File Generation History -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-xs">生成历史</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">查看和管理最近生成的文件。</p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="pl-xl pr-sm py-xs bg-surface-container border border-outline-variant rounded-full text-body-md font-body-md focus:outline-none focus:border-primary w-64" placeholder="搜索文件名..." type="text"/>
+</div>
+<button class="p-xs text-on-surface-variant hover:text-primary border border-outline-variant rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container sticky top-0 z-10">
+<tr>
+<th class="px-md py-sm text-label-sm font-label-sm text-on-surface-variant border-b border-outline-variant w-1/3">文件名</th>
+<th class="px-md py-sm text-label-sm font-label-sm text-on-surface-variant border-b border-outline-variant">状态</th>
+<th class="px-md py-sm text-label-sm font-label-sm text-on-surface-variant border-b border-outline-variant hidden xl:table-cell">关联会话 (ID)</th>
+<th class="px-md py-sm text-label-sm font-label-sm text-on-surface-variant border-b border-outline-variant">生成时间</th>
+<th class="px-md py-sm text-label-sm font-label-sm text-on-surface-variant border-b border-outline-variant text-right">操作</th>
+</tr>
+</thead>
+<tbody class="text-body-md font-body-md divide-y divide-outline-variant/50 bg-surface-container-lowest">
+<!-- Row 1: Generating -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-medium text-on-surface truncate">Q3_Marketing_Plan_Draft.docx</span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-md bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[14px] animate-spin">sync</span>
+                                        生成中...
+                                    </span>
+</td>
+<td class="px-md py-sm text-on-surface-variant hidden xl:table-cell font-mono-metric text-mono-metric">conv_8892</td>
+<td class="px-md py-sm text-on-surface-variant">刚刚</td>
+<td class="px-md py-sm text-right">
+<div class="flex items-center justify-end gap-xs opacity-50 pointer-events-none">
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">download</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">share</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-error-container hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Success -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">table_view</span>
+<span class="font-medium text-on-surface truncate">Financial_Summary_Aug.xlsx</span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-md bg-[#e6f4ea] text-[#137333] text-label-sm font-label-sm border border-[#ceead6]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                        成功
+                                    </span>
+</td>
+<td class="px-md py-sm text-on-surface-variant hidden xl:table-cell font-mono-metric text-mono-metric">conv_8885</td>
+<td class="px-md py-sm text-on-surface-variant">2023-10-27 14:30</td>
+<td class="px-md py-sm text-right">
+<div class="flex items-center justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="下载"><span class="material-symbols-outlined text-[18px]">download</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="分享"><span class="material-symbols-outlined text-[18px]">share</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-error-container hover:text-error transition-colors" title="删除"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Success -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-[#ff6d00]">co_present</span>
+<span class="font-medium text-on-surface truncate">Product_Launch_Pitch.pptx</span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-md bg-[#e6f4ea] text-[#137333] text-label-sm font-label-sm border border-[#ceead6]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                        成功
+                                    </span>
+</td>
+<td class="px-md py-sm text-on-surface-variant hidden xl:table-cell font-mono-metric text-mono-metric">conv_8870</td>
+<td class="px-md py-sm text-on-surface-variant">2023-10-26 09:15</td>
+<td class="px-md py-sm text-right">
+<div class="flex items-center justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="下载"><span class="material-symbols-outlined text-[18px]">download</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="分享"><span class="material-symbols-outlined text-[18px]">share</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-error-container hover:text-error transition-colors" title="删除"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Failed -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-medium text-on-surface truncate">Client_Contract_Template.docx</span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-md bg-error-container text-on-error-container text-label-sm font-label-sm border border-[#f8b4b4]">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                        失败 (数据缺失)
+                                    </span>
+</td>
+<td class="px-md py-sm text-on-surface-variant hidden xl:table-cell font-mono-metric text-mono-metric">conv_8865</td>
+<td class="px-md py-sm text-on-surface-variant">2023-10-25 16:45</td>
+<td class="px-md py-sm text-right">
+<div class="flex items-center justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="重试"><span class="material-symbols-outlined text-[18px]">refresh</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-error-container hover:text-error transition-colors" title="删除"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Success -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-medium text-on-surface truncate">Weekly_Status_Report_W42.docx</span>
+</td>
+<td class="px-md py-sm">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-md bg-[#e6f4ea] text-[#137333] text-label-sm font-label-sm border border-[#ceead6]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                        成功
+                                    </span>
+</td>
+<td class="px-md py-sm text-on-surface-variant hidden xl:table-cell font-mono-metric text-mono-metric">conv_8850</td>
+<td class="px-md py-sm text-on-surface-variant">2023-10-20 18:00</td>
+<td class="px-md py-sm text-right">
+<div class="flex items-center justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="下载"><span class="material-symbols-outlined text-[18px]">download</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-surface-container hover:text-primary transition-colors" title="分享"><span class="material-symbols-outlined text-[18px]">share</span></button>
+<button class="p-xs text-on-surface-variant rounded hover:bg-error-container hover:text-error transition-colors" title="删除"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-sm border-t border-outline-variant bg-surface-container-lowest flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant pl-sm">共 24 条记录</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container disabled:opacity-50"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<span class="text-label-sm font-label-sm text-on-surface px-sm">1 / 5</span>
+<button class="p-xs rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
