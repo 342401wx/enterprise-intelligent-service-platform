@@ -27,3 +27,4 @@ __pycache__/
 
 # Local Word artifacts
 *.docx
+runtime-data/

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { BookOpen, Building2, CheckCircle2, ChevronRight, Filter, Plus, RefreshCw, Search, ShieldAlert, ShieldCheck, UserCog, UsersRound, X } from 'lucide-react'
+import { BookOpen, Building2, CheckCircle2, ChevronRight, Filter, KeyRound, Plus, RefreshCw, Search, ShieldAlert, ShieldCheck, UserCog, UsersRound, X } from 'lucide-react'
 import { apiFetch } from './api'
 
 type Role = 'employee' | 'manager' | 'admin'
 type AdminTab = 'users' | 'departments' | 'roles' | 'audit'
 type AdminUser = { id: string; name: string; email: string; department: string; role: Role; status: string }
 type AuditItem = { id: string; user_id: string; action: string; resource_type: string; resource_id?: string; detail: Record<string, unknown>; created_at: string }
+type ResetRequest = { id: string; userId: string; name: string; email: string; department: string; createdAt: string; readAt?: string | null; status: string }
 
 const roleLabels: Record<Role, string> = { employee: '普通员工', manager: '管理层', admin: '管理员' }
 const rolePermissions: Record<Role, { allowed: string[]; restricted: string[]; scope: string }> = {
@@ -38,6 +39,12 @@ export function AdminPage({ role, notify }: { role: Role; notify: (message: stri
   const [tab, setTab] = useState<AdminTab>('users')
   const [users, setUsers] = useState<AdminUser[]>([])
   const [auditItems, setAuditItems] = useState<AuditItem[]>([])
+  const [resetRequests, setResetRequests] = useState<ResetRequest[]>([])
+  const [resetOpen, setResetOpen] = useState(false)
+  const [resetTarget, setResetTarget] = useState<AdminUser | null>(null)
+  const [resetPassword, setResetPassword] = useState('')
+  const [resetRequestId, setResetRequestId] = useState('')
+  const [resetSubmitting, setResetSubmitting] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
@@ -47,7 +54,8 @@ export function AdminPage({ role, notify }: { role: Role; notify: (message: stri
     void Promise.all([
       apiFetch<AdminUser[]>('/admin/users'),
       apiFetch<AuditItem[]>('/admin/audit'),
-    ]).then(([userItems, audit]) => { setUsers(userItems); setAuditItems(audit) }).catch(() => notify('组织数据加载失败，请检查后端服务'))
+      apiFetch<ResetRequest[]>('/admin/password-reset-requests'),
+    ]).then(([userItems, audit, requests]) => { setUsers(userItems); setAuditItems(audit); setResetRequests(requests) }).catch(() => notify('组织数据加载失败，请检查后端服务'))
   }, [notify])
 
   const filteredUsers = useMemo(() => users.filter((user) => `${user.name} ${user.email} ${user.department}`.toLowerCase().includes(search.toLowerCase())), [users, search])
@@ -70,13 +78,44 @@ export function AdminPage({ role, notify }: { role: Role; notify: (message: stri
   }
 
 
+  const openReset = (target: AdminUser, requestId = '') => {
+    setResetTarget(target)
+    setResetRequestId(requestId)
+    setResetPassword('')
+    setResetOpen(true)
+  }
+  const submitReset = async (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!resetTarget) return
+    setResetSubmitting(true)
+    try {
+      await apiFetch<AdminUser>('/admin/users/' + encodeURIComponent(resetTarget.id) + '/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ new_password: resetPassword, request_id: resetRequestId || null }),
+      })
+      const [userItems, requests] = await Promise.all([
+        apiFetch<AdminUser[]>('/admin/users'),
+        apiFetch<ResetRequest[]>('/admin/password-reset-requests'),
+      ])
+      setUsers(userItems)
+      setResetRequests(requests)
+      setResetOpen(false)
+      notify(resetTarget.name + ' 的密码已重置')
+    } catch (error) {
+      notify(error instanceof Error ? error.message : '密码重置失败')
+    } finally {
+      setResetSubmitting(false)
+    }
+  }
   return <div className="page-stack">
     <div className="page-header"><div><div className="eyebrow">平台管理</div><h1>组织与权限</h1><p>统一维护用户、部门、角色和资源授权。</p></div>{tab === 'users' && <button className="button primary" onClick={() => { setNewUser((value) => ({ ...value, department: value.department || departments[0]?.name || '' })); setCreateOpen(true) }}><Plus size={16} />添加用户</button>}</div>
     <div className="tab-bar admin-tabs">{tabs.map(([key, label]) => <button key={key} className={tab === key ? 'active' : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
-    {tab === 'users' && <Panel><div className="toolbar"><div><h2>用户目录</h2><p className="toolbar-sub">共 {users.length} 位用户 · 角色由后端会话决定</p></div><div className="toolbar-actions"><div className="field search-field"><Search size={15} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="搜索姓名、邮箱或部门" /></div><button className="button secondary small" onClick={() => setSearch('')}><X size={14} />清空</button></div></div><div className="table-wrap"><table><thead><tr><th>用户</th><th>部门</th><th>角色</th><th>状态</th><th>操作</th></tr></thead><tbody>{filteredUsers.map((user) => <tr key={user.id}><td><span className="person-cell"><span className="avatar">{user.name.slice(0, 1)}</span><strong>{user.name}<small>{user.email}</small></strong></span></td><td>{user.department}</td><td><span className="role-tag"><UserCog size={14} />{roleLabels[user.role]}</span></td><td><Status tone={user.status === 'active' ? 'success' : 'pending'}>{user.status === 'active' ? '正常' : '待激活'}</Status></td><td><button className="text-button" onClick={() => notify(`已打开 ${user.name} 的权限编辑`)}>编辑权限</button></td></tr>)}</tbody></table></div></Panel>}
+    {tab === 'users' && <Panel><div className="toolbar"><div><h2>用户目录</h2><p className="toolbar-sub">共 {users.length} 位用户 · 角色由后端会话决定</p></div><div className="toolbar-actions"><div className="field search-field"><Search size={15} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="搜索姓名、邮箱或部门" /></div><button className="button secondary small" onClick={() => setSearch('')}><X size={14} />清空</button></div></div><div className="table-wrap"><table><thead><tr><th>用户</th><th>部门</th><th>角色</th><th>状态</th><th>操作</th></tr></thead><tbody>{filteredUsers.map((user) => <tr key={user.id}><td><span className="person-cell"><span className="avatar">{user.name.slice(0, 1)}</span><strong>{user.name}<small>{user.email}</small></strong></span></td><td>{user.department}</td><td><span className="role-tag"><UserCog size={14} />{roleLabels[user.role]}</span></td><td><Status tone={user.status === 'active' ? 'success' : 'pending'}>{user.status === 'active' ? '正常' : '待激活'}</Status></td><td><span className="table-actions"><button className="text-button" onClick={() => notify('已打开 ' + user.name + ' 的权限编辑')}>编辑权限</button>{user.role !== 'admin' && <button className="text-button" type="button" onClick={() => openReset(user)}>重置密码</button>}</span></td></tr>)}</tbody></table></div></Panel>}
+    {tab === 'users' && <Panel><div className="section-heading"><div><h2>密码重置申请</h2><p>员工忘记密码后提交的申请，由管理员核验身份并设置新密码。</p></div><span className="history-count">{resetRequests.length} 条待处理</span></div>{resetRequests.length === 0 ? <p className="empty-inline">暂无待处理的密码重置申请</p> : <div className="table-wrap"><table><thead><tr><th>员工</th><th>部门</th><th>申请时间</th><th>状态</th><th>操作</th></tr></thead><tbody>{resetRequests.map((request) => <tr key={request.id}><td><span className="person-cell"><span className="avatar">{request.name.slice(0, 1)}</span><strong>{request.name}<small>{request.email}</small></strong></span></td><td>{request.department}</td><td>{request.createdAt}</td><td><Status tone="pending">待处理</Status></td><td><button className="button primary small" type="button" onClick={() => { const target = users.find((item) => item.id === request.userId); if (target) openReset(target, request.id); else notify('员工账号不存在') }}><KeyRound size={14} />设置新密码</button></td></tr>)}</tbody></table></div>}</Panel>}
     {tab === 'departments' && <Panel><div className="section-heading"><div><h2>部门目录</h2><p>组织关系由管理员维护，审批人从部门关系中匹配。</p></div><button className="button primary small" onClick={() => notify('新增部门流程将在组织配置接口接入后开放')}><Plus size={15} />新增部门</button></div><div className="table-wrap"><table><thead><tr><th>部门</th><th>人数</th><th>负责人</th><th>知识库范围</th><th>状态</th></tr></thead><tbody>{departments.map((department) => <tr key={department.name}><td><span className="person-cell"><span className="file-icon doc"><Building2 size={16} /></span><strong>{department.name}<small>组织节点 · 可继续添加子部门</small></strong></span></td><td>{department.count} 人</td><td>{department.manager}</td><td><span className="role-tag"><BookOpen size={14} />按部门授权</span></td><td><Status tone="success">启用</Status></td></tr>)}</tbody></table></div></Panel>}
     {tab === 'roles' && <Panel><div className="section-heading"><div><h2>角色与权限</h2><p>角色只由管理员分配，员工不能在前端自行提升权限。</p></div><button className="button primary small" onClick={() => notify('自定义角色流程将在权限策略接口接入后开放')}><Plus size={15} />新增角色</button></div><div className="role-grid">{roleRows.map((item) => <div className="role-card" key={item.role}><div className="role-card-head"><span className="role-tag"><ShieldCheck size={14} />{roleLabels[item.role]}</span><strong>{users.filter((user) => user.role === item.role).length}</strong></div><p>{item.description}</p><button className="text-button" onClick={() => setSelectedRole(item.role)}>查看权限<ChevronRight size={14} /></button></div>)}</div></Panel>}
     {tab === 'audit' && <Panel><div className="toolbar"><div><h2>权限变更记录</h2><p className="toolbar-sub">记录用户、角色、资源和敏感配置的变更</p></div><button className="button secondary small" onClick={() => { void apiFetch<AuditItem[]>('/admin/audit').then(setAuditItems); notify('审计记录已刷新') }}><RefreshCw size={15} />刷新</button></div><div className="table-wrap"><table><thead><tr><th>时间</th><th>操作人</th><th>动作</th><th>资源</th><th>资源 ID</th><th>详情</th></tr></thead><tbody>{auditItems.map((item) => <tr key={item.id}><td>{item.created_at}</td><td><code>{item.user_id}</code></td><td><span className="role-tag"><ShieldAlert size={14} />{item.action}</span></td><td>{item.resource_type}</td><td><code>{item.resource_id || '-'}</code></td><td><span className="audit-detail">{JSON.stringify(item.detail)}</span></td></tr>)}</tbody></table></div></Panel>}
+    {resetOpen && resetTarget && <div className="modal-backdrop" role="presentation" onClick={() => setResetOpen(false)}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="reset-password-title" onClick={(event) => event.stopPropagation()}><div className="modal-head"><div><div className="eyebrow">管理员操作</div><h2 id="reset-password-title">重置员工密码</h2></div><button className="icon-button" type="button" aria-label="关闭密码重置" onClick={() => setResetOpen(false)}><X size={18} /></button></div><form className="form-stack" onSubmit={submitReset}><div className="confirm-box"><KeyRound size={17} /><p>将为 <strong>{resetTarget.name}</strong>（{resetTarget.email}）设置新密码，并使该员工现有登录会话失效。</p></div><label>新密码<input type="password" minLength={8} maxLength={128} value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} placeholder="至少 8 位" autoComplete="new-password" required /></label>{resetRequestId && <p className="helper-text">关联申请：{resetRequestId}</p>}<div className="modal-actions"><button className="button secondary" type="button" onClick={() => setResetOpen(false)}>取消</button><button className="button primary" type="submit" disabled={resetSubmitting}>{resetSubmitting ? '保存中...' : '确认重置'}</button></div></form></section></div>}
     {selectedRole && <div className="modal-backdrop" role="presentation" onClick={() => setSelectedRole(null)}><section className="modal permission-modal" role="dialog" aria-modal="true" aria-labelledby="permission-detail-title" onClick={(event) => event.stopPropagation()}><div className="modal-head"><div><div className="eyebrow">角色权限</div><h2 id="permission-detail-title">{roleLabels[selectedRole]}权限详情</h2></div><button className="icon-button" type="button" aria-label="关闭权限详情" title="关闭" onClick={() => setSelectedRole(null)}><X size={18} /></button></div><div className="permission-summary"><div><span className="role-tag"><ShieldCheck size={14} />{roleLabels[selectedRole]}</span><p>{roleRows.find((item) => item.role === selectedRole)?.description}</p></div><div className="permission-count"><strong>{users.filter((user) => user.role === selectedRole).length}</strong><span>名关联用户</span></div></div><div className="permission-grid"><div className="permission-section"><h3>允许的操作</h3>{rolePermissions[selectedRole].allowed.length > 0 ? <ul>{rolePermissions[selectedRole].allowed.map((item) => <li key={item}>{item}</li>)}</ul> : <p className="muted">暂无额外限制</p>}</div><div className="permission-section"><h3>限制的操作</h3>{rolePermissions[selectedRole].restricted.length > 0 ? <ul>{rolePermissions[selectedRole].restricted.map((item) => <li key={item}>{item}</li>)}</ul> : <p className="muted">无</p>}</div></div><div className="permission-scope"><span>资源范围</span><strong>{rolePermissions[selectedRole].scope}</strong></div></section></div>}
     {createOpen && <div className="modal-backdrop" role="presentation" onClick={() => setCreateOpen(false)}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="create-user-title" onClick={(event) => event.stopPropagation()}><div className="modal-head"><h2 id="create-user-title">创建企业账号</h2><button className="icon-button" type="button" aria-label="关闭创建账号" onClick={() => setCreateOpen(false)}><X size={18} /></button></div><form className="form-stack" onSubmit={createUser}><label>姓名<input value={newUser.name} onChange={(event) => setNewUser({ ...newUser, name: event.target.value })} placeholder="输入员工姓名" required /></label><label>企业邮箱<input type="email" value={newUser.email} onChange={(event) => setNewUser({ ...newUser, email: event.target.value })} placeholder="name@company.internal" required /></label><label>部门<select value={newUser.department} onChange={(event) => setNewUser({ ...newUser, department: event.target.value })} required><option value="">请选择部门</option>{departments.map((item) => <option key={item.name} value={item.name}>{item.name}</option>)}</select></label><label>角色<select value={newUser.role} onChange={(event) => setNewUser({ ...newUser, role: event.target.value as Role })}><option value="employee">普通员工</option><option value="manager">管理层</option><option value="admin">管理员</option></select></label><label>初始密码<input type="password" minLength={8} value={newUser.password} onChange={(event) => setNewUser({ ...newUser, password: event.target.value })} placeholder="至少 8 位" autoComplete="new-password" required /></label><div className="modal-actions"><button className="button secondary" type="button" onClick={() => setCreateOpen(false)}>取消</button><button className="button primary" type="submit"><Plus size={16} />创建账号</button></div></form></section></div>}
   </div>

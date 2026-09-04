@@ -100,3 +100,33 @@ npm run build
 - [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI)：用于 AI Agent 场景下的 Word、Excel、PowerPoint 等 Office 文档处理与自动化。
 
 本项目的企业邮箱功能通过 AgentMail CLI 接入；后端 Office 文件生成和解析同时使用 `python-docx`、`openpyxl` 和 `python-pptx` 等 Python 库。具体开源项目请遵循各自仓库和软件包中的许可证要求。
+## Docker 一键部署
+
+安装 Docker Desktop 后，在项目根目录执行：
+
+```powershell
+docker compose --env-file docker-compose.env.example up -d --build
+```
+
+或直接运行：
+
+```powershell
+.\docker-up.ps1
+```
+
+访问：`http://localhost:5173`
+
+默认管理员账号：
+
+```text
+账号：admin
+密码：12345678
+```
+
+运行数据会保存在项目根目录的 `runtime-data/`，包括 SQLite 数据库、加密密钥、上传文件、生成文件和邮件附件，不会写入镜像。停止服务：
+
+```powershell
+.\docker-down.ps1
+```
+
+首次部署会在后端镜像中安装 AgentMail CLI。AgentMail OAuth 授权仍需进入企业邮箱页面完成微信扫码。正式部署前请复制 `docker-compose.env.example` 为自己的环境配置，并修改测试密码、端口和数据目录。

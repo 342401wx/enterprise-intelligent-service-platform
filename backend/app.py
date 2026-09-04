@@ -344,6 +344,11 @@ def init_db() -> None:
                 due_date TEXT, priority TEXT NOT NULL DEFAULT 'normal', status TEXT NOT NULL DEFAULT 'open',
                 created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
                 FOREIGN KEY(owner_id) REFERENCES users(id)
+            );            CREATE TABLE IF NOT EXISTS password_reset_requests (
+                id TEXT PRIMARY KEY, user_id TEXT NOT NULL, identifier TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL,
+                read_at TEXT, handled_by TEXT, handled_at TEXT,
+                FOREIGN KEY(user_id) REFERENCES users(id)
             );            CREATE TABLE IF NOT EXISTS agent_events (
                 id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL, task_id TEXT NOT NULL,
                 trace_id TEXT NOT NULL, seq INTEGER NOT NULL, event_type TEXT NOT NULL,
@@ -351,7 +356,13 @@ def init_db() -> None:
                 safe_summary TEXT NOT NULL, data TEXT NOT NULL, created_at TEXT NOT NULL,
                 FOREIGN KEY(conversation_id) REFERENCES conversations(id)
             );
-            CREATE TABLE IF NOT EXISTS leave_requests (
+            CREATE TABLE IF NOT EXISTS token_usage (
+                id TEXT PRIMARY KEY, user_id TEXT NOT NULL, conversation_id TEXT NOT NULL,
+                task_id TEXT NOT NULL, provider TEXT NOT NULL, model TEXT NOT NULL,
+                input_tokens INTEGER NOT NULL DEFAULT 0, output_tokens INTEGER NOT NULL DEFAULT 0,
+                total_tokens INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES users(id)
+            );            CREATE TABLE IF NOT EXISTS leave_requests (
                 id TEXT PRIMARY KEY, applicant_id TEXT NOT NULL, applicant TEXT NOT NULL,
                 department TEXT NOT NULL, leave_type TEXT NOT NULL, dates TEXT NOT NULL,
                 days REAL NOT NULL, status TEXT NOT NULL, reason TEXT NOT NULL,
@@ -508,6 +519,12 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class ForgotPasswordRequest(BaseModel):
+    identifier: str = Field(min_length=1, max_length=160)
+
+class AdminPasswordResetRequest(BaseModel):
+    new_password: str = Field(min_length=8, max_length=128)
+    request_id: str | None = None
 class CreateUserRequest(BaseModel):
     name: str = Field(min_length=1, max_length=80)
     email: str
@@ -634,11 +651,35 @@ def logout(authorization: str | None = Header(default=None)) -> dict[str, bool]:
             conn.commit()
     return {"ok": True}
 
+@app.post("/api/auth/forgot-password")
+def forgot_password(payload: ForgotPasswordRequest) -> dict[str, Any]:
+    """Create a review request without disclosing whether the account exists."""
+    identifier = payload.identifier.strip()
+    with closing(connect()) as conn:
+        target = row(conn, "SELECT id, name, email, role, status FROM users WHERE lower(email) = lower(?) LIMIT 1", (identifier,))
+        if target and target.get("role") != "admin" and target.get("status") == "active":
+            pending = row(conn, "SELECT id FROM password_reset_requests WHERE user_id = ? AND status = 'pending' LIMIT 1", (target["id"],))
+            if not pending:
+                conn.execute(
+                    "INSERT INTO password_reset_requests (id, user_id, identifier, status, created_at) VALUES (?, ?, ?, 'pending', ?)",
+                    (f"PRQ-{uuid.uuid4().hex[:12].upper()}", target["id"], identifier, now()),
+                )
+                conn.commit()
+    return {"ok": True, "message": "如果账号存在，管理员将收到密码重置通知。"}
 @app.get("/api/auth/me")
 def me(user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
     return user
 
 
+def visible_notifications(conn: sqlite3.Connection, user: dict[str, Any]) -> list[dict[str, Any]]:
+    items = rows(conn, "SELECT id, title, detail, type, time, unread FROM notifications ORDER BY rowid DESC")
+    if user.get('role') == 'admin':
+        requests = rows(conn, "SELECT r.id, r.user_id, r.created_at, r.read_at, u.name, u.email FROM password_reset_requests r JOIN users u ON u.id = r.user_id WHERE r.status = 'pending' ORDER BY r.created_at DESC")
+        for request in requests:
+            items.insert(0, {'id': 'PR-' + request['id'], 'title': '员工密码重置申请', 'detail': f"{request['name']}（{request['email']}）请求重置登录密码", 'type': 'password_reset', 'time': request['created_at'], 'unread': request['read_at'] is None})
+    for item in items:
+        item['unread'] = bool(item['unread'])
+    return items
 @app.get("/api/bootstrap")
 def bootstrap(user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
     with closing(connect()) as conn:
@@ -662,9 +703,9 @@ def bootstrap(user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
             documents = rows(conn, "SELECT id, name, owner, size, status, stage, updated, knowledge_base AS knowledgeBase FROM documents ORDER BY created_at DESC")
             tasks = rows(conn, "SELECT id, document, stage, status, progress, updated FROM ingestion_tasks ORDER BY updated DESC")
             files = rows(conn, "SELECT id, name, file_type AS type, status, conversation_id AS conversationId, created_at AS createdAt, template, file_path AS filePath, owner_id FROM generated_files ORDER BY created_at DESC")
-        notifications = rows(conn, "SELECT id, title, detail, type, time, unread FROM notifications ORDER BY time DESC")
-        for item in notifications:
-            item["unread"] = bool(item["unread"])
+        notifications = visible_notifications(conn, user)
+
+
         conversations = rows(conn, "SELECT id, title, preview, updated_at AS updated FROM conversations WHERE user_id = ? ORDER BY updated_at DESC", (user["id"],))
     return {"user": user, "leaves": leaves, "documents": documents, "tasks": tasks, "files": files, "notifications": notifications, "conversations": conversations}
 
@@ -836,20 +877,21 @@ def list_tasks(user: dict[str, Any] = Depends(get_user)) -> list[dict[str, Any]]
 @app.get("/api/notifications")
 def list_notifications(user: dict[str, Any] = Depends(get_user)) -> list[dict[str, Any]]:
     with closing(connect()) as conn:
-        items = rows(conn, "SELECT id, title, detail, type, time, unread FROM notifications ORDER BY rowid DESC")
-    for item in items:
-        item["unread"] = bool(item["unread"])
-    return items
+        return visible_notifications(conn, user)
 
 
 @app.post("/api/notifications/{notification_id}/read")
 def mark_notification_read(notification_id: str, user: dict[str, Any] = Depends(get_user)) -> dict[str, bool]:
     with closing(connect()) as conn:
-        conn.execute("UPDATE notifications SET unread = 0 WHERE id = ?", (notification_id,))
+        if notification_id.startswith("PR-"):
+            require_role(user, "admin")
+            request_id = notification_id.removeprefix("PR-")
+            conn.execute("UPDATE password_reset_requests SET read_at = COALESCE(read_at, ?) WHERE id = ? AND status = 'pending'", (now(), request_id))
+        else:
+            conn.execute("UPDATE notifications SET unread = 0 WHERE id = ?", (notification_id,))
         audit(conn, user["id"], "notification.read", "notification", notification_id)
         conn.commit()
     return {"ok": True}
-
 
 def ensure_conversation(conn: sqlite3.Connection, conversation_id: str, user_id: str, title: str = "新对话") -> None:
     if not row(conn, "SELECT id FROM conversations WHERE id = ?", (conversation_id,)):
@@ -910,7 +952,23 @@ def extract_model_response(payload: Any, api_format: str) -> str:
     return ""
 
 
-def call_configured_model(config: dict[str, Any], messages: list[dict[str, str]]) -> tuple[str, int, str]:
+def extract_model_usage(payload: Any) -> dict[str, int]:
+    usage = payload.get("usage") if isinstance(payload, dict) else None
+    if not isinstance(usage, dict):
+        return {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+    input_tokens = usage.get("prompt_tokens", usage.get("input_tokens", 0))
+    output_tokens = usage.get("completion_tokens", usage.get("output_tokens", 0))
+    total_tokens = usage.get("total_tokens", 0)
+    try:
+        input_value = max(0, int(input_tokens or 0))
+        output_value = max(0, int(output_tokens or 0))
+        total_value = max(0, int(total_tokens or 0)) or input_value + output_value
+    except (TypeError, ValueError):
+        return {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+    return {"input_tokens": input_value, "output_tokens": output_value, "total_tokens": total_value}
+
+
+def call_configured_model(config: dict[str, Any], messages: list[dict[str, str]]) -> tuple[str, int, str, dict[str, int]]:
     api_format = config.get("api_format") or "openai-responses"
     if api_format == "google-generative-ai":
         raise ValueError("Google Generative AI 对话适配尚未启用，请选择 OpenAI 或 Anthropic 兼容协议")
@@ -944,7 +1002,7 @@ def call_configured_model(config: dict[str, Any], messages: list[dict[str, str]]
     response_text = extract_model_response(payload, api_format)
     if not response_text:
         raise ValueError("模型接口返回成功，但没有找到可显示的文本内容")
-    return response_text, int((time.perf_counter() - started) * 1000), endpoint
+    return response_text, int((time.perf_counter() - started) * 1000), endpoint, extract_model_usage(payload)
 
 
 def _extract_leave_details(request_text: str) -> dict[str, str]:
@@ -1347,7 +1405,7 @@ def send_message(conversation_id: str, payload: MessageRequest, user: dict[str, 
                 conn.commit()
             raise HTTPException(status_code=500, detail=f"文档生成失败：{exc}") from exc
     try:
-        response_text, duration_ms, endpoint = call_configured_model(config, [{"role": "system", "content": "你是企业内部智能服务助手。必须结合当前会话历史理解“继续、它、这个”等指代，不能把每条消息当成孤立问题。优先准确回答，不要编造制度；涉及提交、发送、删除等写操作时，只能说明需要确认。"}, *history])
+        response_text, duration_ms, endpoint, usage = call_configured_model(config, [{"role": "system", "content": "你是企业内部智能服务助手。必须结合当前会话历史理解“继续、它、这个”等指代，不能把每条消息当成孤立问题。优先准确回答，不要编造制度；涉及提交、发送、删除等写操作时，只能说明需要确认。"}, *history])
     except ValueError as exc:
         with closing(connect()) as conn:
             _insert_agent_event(conn, conversation_id, task_id, trace_id, event_seq + 2, "model_requested", "调用已配置模型", "failed", "--", str(exc), {"model": config.get("model", "unknown"), "error": str(exc)})
@@ -1355,8 +1413,9 @@ def send_message(conversation_id: str, payload: MessageRequest, user: dict[str, 
             conn.commit()
         raise HTTPException(502, str(exc)) from exc
     with closing(connect()) as conn:
-        _insert_agent_event(conn, conversation_id, task_id, trace_id, event_seq + 2, "model_requested", "调用已配置模型", "success", f"{duration_ms}ms", "模型调用成功", {"model": config["model"], "endpoint": endpoint, "response_saved": True})
-        _insert_agent_event(conn, conversation_id, task_id, trace_id, event_seq + 3, "response_generated", "生成结果", "success", f"{duration_ms}ms", "已生成模型回答", {"model": config["model"], "citation_count": 0})
+        _insert_agent_event(conn, conversation_id, task_id, trace_id, event_seq + 2, "model_requested", "调用已配置模型", "success", f"{duration_ms}ms", "模型调用成功", {"model": config["model"], "endpoint": endpoint, "response_saved": True, "usage": usage})
+        _insert_agent_event(conn, conversation_id, task_id, trace_id, event_seq + 3, "response_generated", "生成结果", "success", f"{duration_ms}ms", "已生成模型回答", {"model": config["model"], "citation_count": 0, "usage": usage})
+        conn.execute("INSERT INTO token_usage (id, user_id, conversation_id, task_id, provider, model, input_tokens, output_tokens, total_tokens, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (f"USE-{uuid.uuid4().hex[:12].upper()}", user["id"], conversation_id, task_id, config.get("provider", ""), config["model"], usage["input_tokens"], usage["output_tokens"], usage["total_tokens"], now()))
         conn.execute("INSERT INTO messages VALUES (?, ?, 'assistant', ?, ?, ?)", (f"MSG-{uuid.uuid4().hex[:10].upper()}", conversation_id, response_text, message_count + 1, now()))
         conn.execute("UPDATE conversations SET preview = ?, updated_at = ? WHERE id = ?", (payload.content[:60], now(), conversation_id))
         audit(conn, user["id"], "conversation.message", "conversation", conversation_id, {"task_id": task_id, "trace_id": trace_id, "model": config["model"]})
@@ -1779,6 +1838,69 @@ def save_model_config(payload: ModelConfigRequest, user: dict[str, Any] = Depend
         conn.commit()
         return row(conn, "SELECT id, scope_type, scope_id, provider, model, api_url, api_key_masked, api_format, enabled, updated_at FROM model_configs WHERE id = ?", (config_id,)) or {}
 
+@app.get("/api/usage")
+def usage_summary(day: str | None = None, provider: str | None = None, model: str | None = None, user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
+    if day:
+        try:
+            datetime.strptime(day, "%Y-%m-%d")
+        except ValueError as exc:
+            raise HTTPException(422, "日期格式必须为 YYYY-MM-DD") from exc
+    with closing(connect()) as conn:
+        if user["role"] == "admin":
+            scope = rows(conn, "SELECT id, name, email, department, role FROM users WHERE status = 'active' ORDER BY department, name")
+        elif user["role"] == "manager":
+            scope = rows(conn, """SELECT id, name, email, department, role FROM users
+                WHERE status = 'active' AND (id = ? OR supervisor_id = ? OR department IN
+                (SELECT name FROM departments WHERE manager_id = ?))
+                ORDER BY department, name""", (user["id"], user["id"], user["id"]))
+        else:
+            scope = [user]
+        ids = [item["id"] for item in scope]
+        if not ids:
+            return {"scope": user["role"], "selectedDay": day, "filters": {"providers": [], "models": []}, "summary": {"inputTokens": 0, "outputTokens": 0, "totalTokens": 0, "requests": 0}, "trend": [], "members": []}
+        placeholders = ",".join("?" for _ in ids)
+        base_params: list[Any] = list(ids)
+        filters = [f"user_id IN ({placeholders})"]
+        if day:
+            filters.append("substr(created_at, 1, 10) = ?")
+            base_params.append(day)
+        if provider:
+            filters.append("provider = ?")
+            base_params.append(provider)
+        if model:
+            filters.append("model = ?")
+            base_params.append(model)
+        where = " AND ".join(filters)
+        available_rows = rows(conn, f"SELECT DISTINCT provider, model FROM token_usage WHERE user_id IN ({placeholders}) ORDER BY provider, model", tuple(ids))
+        aggregates = rows(conn, f"""SELECT user_id AS userId,
+            COALESCE(SUM(input_tokens), 0) AS inputTokens,
+            COALESCE(SUM(output_tokens), 0) AS outputTokens,
+            COALESCE(SUM(total_tokens), 0) AS totalTokens,
+            COUNT(*) AS requests
+            FROM token_usage WHERE {where} GROUP BY user_id""", tuple(base_params))
+        trend_rows = rows(conn, f"""SELECT substr(created_at, 12, 2) AS hour,
+            COALESCE(SUM(input_tokens), 0) AS inputTokens,
+            COALESCE(SUM(output_tokens), 0) AS outputTokens,
+            COALESCE(SUM(total_tokens), 0) AS totalTokens,
+            COUNT(*) AS requests
+            FROM token_usage WHERE {where} GROUP BY substr(created_at, 12, 2) ORDER BY hour""", tuple(base_params))
+        by_user = {item["userId"]: item for item in aggregates}
+        members = []
+        for item in scope:
+            usage = by_user.get(item["id"], {"inputTokens": 0, "outputTokens": 0, "totalTokens": 0, "requests": 0})
+            members.append({**item, **usage, "userId": item["id"]})
+        summary = {key: sum(int(item[key]) for item in members) for key in ("inputTokens", "outputTokens", "totalTokens")}
+        summary["requests"] = sum(int(item["requests"]) for item in members)
+        by_hour = {int(item["hour"]): item for item in trend_rows if str(item.get("hour", "")).isdigit()}
+        trend = [{"hour": hour, "label": f"{hour:02d}:00", "inputTokens": int(by_hour.get(hour, {}).get("inputTokens", 0)), "outputTokens": int(by_hour.get(hour, {}).get("outputTokens", 0)), "totalTokens": int(by_hour.get(hour, {}).get("totalTokens", 0)), "requests": int(by_hour.get(hour, {}).get("requests", 0))} for hour in range(24)]
+    return {
+        "scope": user["role"],
+        "selectedDay": day,
+        "filters": {"providers": sorted({str(item.get("provider") or "") for item in available_rows if item.get("provider")}), "models": sorted({str(item.get("model") or "") for item in available_rows if item.get("model")})},
+        "summary": summary,
+        "trend": trend,
+        "members": members,
+    }
 @app.get("/api/monitoring")
 def monitoring(user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
     require_role(user, "manager", "admin")
@@ -1818,6 +1940,39 @@ def create_admin_user(payload: CreateUserRequest, user: dict[str, Any] = Depends
         conn.commit()
         created = row(conn, "SELECT id, name, email, department, role, status FROM users WHERE id = ?", (user_id,))
     return created or {}
+
+@app.get("/api/admin/password-reset-requests")
+def admin_password_reset_requests(user: dict[str, Any] = Depends(get_user)) -> list[dict[str, Any]]:
+    require_role(user, "admin")
+    with closing(connect()) as conn:
+        return rows(conn, """SELECT r.id, r.user_id AS userId, r.identifier, r.status, r.created_at AS createdAt,
+            r.read_at AS readAt, u.name, u.email, u.department
+            FROM password_reset_requests r JOIN users u ON u.id = r.user_id
+            WHERE r.status = 'pending' ORDER BY r.created_at DESC""")
+
+
+@app.post("/api/admin/users/{user_id}/reset-password")
+def admin_reset_password(user_id: str, payload: AdminPasswordResetRequest, user: dict[str, Any] = Depends(get_user)) -> dict[str, Any]:
+    require_role(user, "admin")
+    with closing(connect()) as conn:
+        target = row(conn, "SELECT * FROM users WHERE id = ? AND status = 'active'", (user_id,))
+        if not target:
+            raise HTTPException(404, "员工账号不存在或已停用")
+        if target.get("role") == "admin":
+            raise HTTPException(403, "不能通过员工重置流程修改管理员密码")
+        if payload.request_id:
+            request = row(conn, "SELECT id, user_id, status FROM password_reset_requests WHERE id = ?", (payload.request_id,))
+            if not request or request.get("user_id") != user_id or request.get("status") != "pending":
+                raise HTTPException(409, "密码重置申请无效或已处理")
+        stamp = now()
+        conn.execute("UPDATE users SET password_hash = ? WHERE id = ?", (hash_password(payload.new_password), user_id))
+        conn.execute("DELETE FROM auth_sessions WHERE user_id = ?", (user_id,))
+        if payload.request_id:
+            conn.execute("UPDATE password_reset_requests SET status = 'handled', handled_by = ?, handled_at = ?, read_at = COALESCE(read_at, ?) WHERE id = ?", (user["id"], stamp, stamp, payload.request_id))
+        audit(conn, user["id"], "user.password_reset", "user", user_id, {"request_id": payload.request_id, "target_email": target["email"]})
+        conn.commit()
+        updated = row(conn, "SELECT id, name, email, department, role, status FROM users WHERE id = ?", (user_id,))
+    return updated or {}
 
 @app.get("/api/admin/audit")
 def admin_audit(limit: int = 50, user: dict[str, Any] = Depends(get_user)) -> list[dict[str, Any]]:

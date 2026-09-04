@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, KeyboardEvent, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Activity,
+  BarChart3,
   Archive,
   ArrowUpRight,
   Bell,
@@ -82,6 +83,7 @@ type Page =
   | 'notifications'
   | 'calendar'
   | 'monitoring'
+  | 'usage'
   | 'trace'
   | 'model'
   | 'admin'
@@ -204,7 +206,7 @@ interface NotificationItem {
   id: string
   title: string
   detail: string
-  type: 'approval' | 'system' | 'knowledge' | 'agent'
+  type: 'approval' | 'system' | 'knowledge' | 'agent' | 'password_reset'
   time: string
   unread: boolean
 }
@@ -231,7 +233,7 @@ function parseLocation(): { page: Page; id?: string } {
   const raw = window.location.hash.replace(/^#\/?/, '') || 'home'
   const [page, id] = raw.split('/')
   if (page === 'knowledge' && id) return { page: 'knowledge-detail', id }
-  const valid: Page[] = ['home', 'assistant', 'applications', 'knowledge', 'email', 'files', 'notifications', 'calendar', 'monitoring', 'trace', 'model', 'admin', 'approval', 'team']
+  const valid: Page[] = ['home', 'assistant', 'applications', 'knowledge', 'email', 'files', 'notifications', 'calendar', 'monitoring', 'usage', 'trace', 'model', 'admin', 'approval', 'team']
   return { page: valid.includes(page as Page) ? (page as Page) : 'home' }
 }
 
@@ -273,7 +275,11 @@ function StatCard({ label, value, detail, icon: Icon, tone = 'blue' }: { label: 
 function LoginPage({ onAuthenticated }: { onAuthenticated: (user: AuthUser) => void }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [forgotIdentifier, setForgotIdentifier] = useState('')
+  const [forgotOpen, setForgotOpen] = useState(false)
+  const [forgotMessage, setForgotMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [forgotSubmitting, setForgotSubmitting] = useState(false)
   const [error, setError] = useState('')
   const submit = async (event: FormEvent) => {
     event.preventDefault()
@@ -288,9 +294,25 @@ function LoginPage({ onAuthenticated }: { onAuthenticated: (user: AuthUser) => v
       setSubmitting(false)
     }
   }
-  return <main className="auth-page"><section className="auth-panel"><div className="brand-mark"><Building2 size={21} /></div><div className="eyebrow">企业智能服务</div><h1>登录平台</h1><p>使用企业账号访问知识库、申请和审批服务。</p><form className="form-stack" onSubmit={submit}><label>账号 / 企业邮箱<input type="text" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@company.internal" autoComplete="username" required /></label><label>密码<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="输入密码" autoComplete="current-password" required /></label>{error && <p className="auth-error">{error}</p>}<button className="button primary" type="submit" disabled={submitting}>{submitting ? '验证中...' : '登录'}</button></form></section></main>
-}
-function AppShell({ page, user, go, unreadCount, onLogout, children }: { page: Page; user: AuthUser; go: (page: Page, id?: string) => void; unreadCount: number; onLogout: () => void; children: ReactNode }) {
+  const submitForgot = async (event: FormEvent) => {
+    event.preventDefault()
+    setForgotSubmitting(true)
+    setForgotMessage('')
+    try {
+      const result = await apiFetch<{ message: string }>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ identifier: forgotIdentifier }),
+      })
+      setForgotMessage(result.message)
+      setForgotIdentifier('')
+    } catch (reason) {
+      setForgotMessage(reason instanceof Error ? reason.message : '申请提交失败，请稍后重试')
+    } finally {
+      setForgotSubmitting(false)
+    }
+  }
+  return <main className="auth-page"><section className="auth-panel"><div className="brand-mark"><Building2 size={21} /></div><div className="eyebrow">企业智能服务</div><h1>登录平台</h1><p>使用企业账号访问知识库、申请和审批服务。</p><form className="form-stack" onSubmit={submit}><label>账号 / 企业邮箱<input type="text" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@company.internal" autoComplete="username" required /></label><label>密码<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="输入密码" autoComplete="current-password" required /></label>{error && <p className="auth-error">{error}</p>}<div className="auth-actions"><button className="button primary" type="submit" disabled={submitting}>{submitting ? '验证中...' : '登录'}</button><button className="text-button" type="button" onClick={() => { setForgotOpen(true); setForgotMessage('') }}>忘记密码？</button></div></form></section>{forgotOpen && <div className="modal-backdrop" role="presentation" onClick={() => setForgotOpen(false)}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="forgot-password-title" onClick={(event) => event.stopPropagation()}><div className="modal-head"><div><div className="eyebrow">账号恢复</div><h2 id="forgot-password-title">申请重置密码</h2></div><button className="icon-button" type="button" aria-label="关闭密码重置申请" onClick={() => setForgotOpen(false)}><X size={18} /></button></div><form className="form-stack" onSubmit={submitForgot}><p className="helper-text">提交后由管理员审核并设置新密码。</p><label>账号 / 企业邮箱<input type="text" value={forgotIdentifier} onChange={(event) => setForgotIdentifier(event.target.value)} placeholder="输入登录账号或企业邮箱" autoComplete="username" required /></label>{forgotMessage && <p className="auth-success">{forgotMessage}</p>}<div className="modal-actions"><button className="button secondary" type="button" onClick={() => setForgotOpen(false)}>关闭</button><button className="button primary" type="submit" disabled={forgotSubmitting}>{forgotSubmitting ? '提交中...' : '提交申请'}</button></div></form></section></div>}</main>
+}function AppShell({ page, user, go, unreadCount, onLogout, children }: { page: Page; user: AuthUser; go: (page: Page, id?: string) => void; unreadCount: number; onLogout: () => void; children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -316,6 +338,7 @@ function AppShell({ page, user, go, unreadCount, onLogout, children }: { page: P
     { page: 'admin', label: '组织与权限', icon: UsersRound, roles: ['admin'] },
     { page: 'model', label: '模型配置', icon: Settings2, roles: ['admin'] },
     { page: 'monitoring', label: '运行监控', icon: Activity, roles: ['admin', 'manager'] },
+    { page: 'usage', label: '模型用量', icon: BarChart3 },
     { page: 'trace', label: '审计与追踪', icon: ShieldCheck, roles: ['admin', 'manager'] },
   ]
   const visible = items.filter((item) => !item.roles || item.roles.includes(user.role))
@@ -328,7 +351,7 @@ function AppShell({ page, user, go, unreadCount, onLogout, children }: { page: P
       <div className="sidebar-footer"><button className="nav-item"><CircleHelp size={18} />帮助中心</button><button className="nav-item danger" onClick={onLogout}><LogOut size={18} />退出登录</button></div>
     </aside>
     <div className="main-shell">
-      <header className="topbar"><div className="topbar-left"><IconButton label="打开导航" onClick={() => setMenuOpen(true)}><Menu size={20} /></IconButton><div className="breadcrumbs"><span>企业智能服务</span><ChevronRight size={14} /><strong>{page === 'home' ? '工作台' : page === 'assistant' ? 'AI 助手' : page === 'knowledge-detail' ? '知识库详情' : page === 'approval' ? '审批中心' : page === 'team' ? '团队管理' : page === 'model' ? '模型配置' : page === 'trace' ? '审计与追踪' : page === 'monitoring' ? '运行监控' : page === 'admin' ? '组织与权限' : page === 'files' ? '文件中心' : page === 'notifications' ? '通知中心' : page === 'calendar' ? '日历与待办' : page === 'email' ? '企业邮箱' : '我的申请'}</strong></div></div><div className="topbar-actions"><div className="top-search"><Search size={16} /><input placeholder="搜索功能、文档或会话 ID" aria-label="全局搜索" /></div><IconButton label="切换主题"><Sun size={18} /></IconButton><button className="notification-button" aria-label="通知中心" onClick={() => go('notifications')}><Bell size={18} />{unreadCount > 0 && <span />}</button><div className="user-menu" ref={profileRef}><button className="user-chip user-chip-button" type="button" aria-label="打开个人信息菜单" aria-expanded={profileOpen} onClick={() => setProfileOpen((value) => !value)}><span className="avatar">{user.name.slice(0, 1) || '用'}</span><span className="user-copy"><strong>{user.name || '当前用户'}</strong><small>{roleLabels[user.role]}</small></span><ChevronDown size={14} className={profileOpen ? 'rotate-180' : ''} /></button>{profileOpen && <div className="profile-menu" role="menu"><div className="profile-menu-head"><strong>个人信息</strong><span className="status-badge status-success">已登录</span></div><div className="profile-info"><div><span>姓名</span><strong>{user.name}</strong></div><div><span>企业邮箱</span><strong>{user.email}</strong></div><div><span>部门</span><strong>{user.department}</strong></div><div><span>角色</span><strong>{roleLabels[user.role]}</strong></div><div><span>用户 ID</span><code>{user.id}</code></div></div><button className="profile-logout" type="button" role="menuitem" onClick={() => { setProfileOpen(false); onLogout() }}><LogOut size={15} />退出登录</button></div>}</div></div></header>
+      <header className="topbar"><div className="topbar-left"><IconButton label="打开导航" onClick={() => setMenuOpen(true)}><Menu size={20} /></IconButton><div className="breadcrumbs"><span>企业智能服务</span><ChevronRight size={14} /><strong>{page === 'home' ? '工作台' : page === 'assistant' ? 'AI 助手' : page === 'knowledge-detail' ? '知识库详情' : page === 'approval' ? '审批中心' : page === 'team' ? '团队管理' : page === 'model' ? '模型配置' : page === 'trace' ? '审计与追踪' : page === 'monitoring' ? '运行监控' : page === 'usage' ? '模型用量' : page === 'admin' ? '组织与权限' : page === 'files' ? '文件中心' : page === 'notifications' ? '通知中心' : page === 'calendar' ? '日历与待办' : page === 'email' ? '企业邮箱' : '我的申请'}</strong></div></div><div className="topbar-actions"><div className="top-search"><Search size={16} /><input placeholder="搜索功能、文档或会话 ID" aria-label="全局搜索" /></div><IconButton label="切换主题"><Sun size={18} /></IconButton><button className="notification-button" aria-label="通知中心" onClick={() => go('notifications')}><Bell size={18} />{unreadCount > 0 && <span />}</button><div className="user-menu" ref={profileRef}><button className="user-chip user-chip-button" type="button" aria-label="打开个人信息菜单" aria-expanded={profileOpen} onClick={() => setProfileOpen((value) => !value)}><span className="avatar">{user.name.slice(0, 1) || '用'}</span><span className="user-copy"><strong>{user.name || '当前用户'}</strong><small>{roleLabels[user.role]}</small></span><ChevronDown size={14} className={profileOpen ? 'rotate-180' : ''} /></button>{profileOpen && <div className="profile-menu" role="menu"><div className="profile-menu-head"><strong>个人信息</strong><span className="status-badge status-success">已登录</span></div><div className="profile-info"><div><span>姓名</span><strong>{user.name}</strong></div><div><span>企业邮箱</span><strong>{user.email}</strong></div><div><span>部门</span><strong>{user.department}</strong></div><div><span>角色</span><strong>{roleLabels[user.role]}</strong></div><div><span>用户 ID</span><code>{user.id}</code></div></div><button className="profile-logout" type="button" role="menuitem" onClick={() => { setProfileOpen(false); onLogout() }}><LogOut size={15} />退出登录</button></div>}</div></div></header>
       <main className="content">{children}</main>
     </div>
   </div>
@@ -337,7 +360,7 @@ function AppShell({ page, user, go, unreadCount, onLogout, children }: { page: P
 function HomePage({ role, go, leaves, notifications, tasks }: { role: Role; go: (page: Page, id?: string) => void; leaves: LeaveRequest[]; notifications: NotificationItem[]; tasks: IngestionTask[] }) {
   const pendingApproval = leaves.filter((item) => item.status === 'pending').length
   const [team, setTeam] = useState<ManagedUser[]>([])
-  const taskTarget = (type: NotificationItem['type']): Page => type === 'approval' ? 'approval' : type === 'knowledge' ? 'knowledge' : type === 'agent' ? 'monitoring' : 'notifications'
+  const taskTarget = (type: NotificationItem['type']): Page => type === 'approval' ? 'approval' : type === 'knowledge' ? 'knowledge' : type === 'agent' ? 'monitoring' : type === 'password_reset' ? 'admin' : 'notifications'
   useEffect(() => {
     if (role === 'employee') return
     void apiFetch<{ members: ManagedUser[] }>('/team').then((data) => setTeam(data.members)).catch(() => setTeam([]))
@@ -913,9 +936,43 @@ function CalendarPage({ notify }: { notify: (message: string) => void }) {
   return <div className="calendar-page page-stack"><PageHeader eyebrow="工作规划" title="日历与待办" description="集中查看请假安排、截止日期和个人待办。" actions={<div className="calendar-actions"><button className="icon-button" aria-label="上个月" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}><ChevronRight size={17} className="rotate-180" /></button><strong>{label}</strong><button className="icon-button" aria-label="下个月" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}><ChevronRight size={17} /></button><button className="button secondary small" onClick={() => setCursor(new Date())}>今天</button><button className="button primary" onClick={() => { setDraft({ title: '', dueDate: selectedDate, priority: 'normal' }); setCreating(true) }}><Plus size={16} />新增待办</button></div>} /><div className="calendar-layout"><Panel className="calendar-panel"><div className="calendar-weekdays">{['一','二','三','四','五','六','日'].map((day) => <span key={day}>{day}</span>)}</div><div className="calendar-grid">{cells.map((day, index) => { const dayItems = day ? itemsForDay(day) : []; const isToday = day === new Date().toISOString().slice(0, 10); return <button className={'calendar-cell ' + (!day ? 'blank ' : '') + (selectedDate === day ? 'selected ' : '') + (isToday ? 'today' : '')} key={day || 'blank-' + index} disabled={!day} onClick={() => setSelectedDate(day)}>{day && <><span className="calendar-day-number">{Number(day.slice(-2))}</span><div className="calendar-event-list">{dayItems.slice(0, 3).map((item) => <span key={item.id + item.kind} className={'calendar-event ' + item.kind + ' ' + (item.priority || '')}>{item.title}</span>)}{dayItems.length > 3 && <small>+{dayItems.length - 3}</small>}</div></>}</button>})}</div></Panel><aside className="calendar-side"><Panel className="todo-panel"><div className="section-heading"><div><h2>{selectedDate ? selectedDate : '我的待办'}</h2><p>{selectedDate ? `${selectedItems.length} 项日程` : `${todos.filter((todo) => todo.status === 'open').length} 项待办未完成`}</p></div></div>{selectedDate && selectedItems.filter((item) => item.kind === 'leave').map((item) => <div className="calendar-detail-item leave" key={item.id}><CalendarDays size={15} /><span><strong>{item.title}</strong><small>{item.status === 'approved' ? '已批准' : item.status === 'pending' ? '待审批' : item.status}</small></span></div>)}<div className="todo-list">{todos.filter((todo) => !selectedDate || todo.dueDate === selectedDate).length === 0 ? <EmptyState icon={ClipboardCheck} title="暂无待办" description="新建待办后会显示在这里和对应日期。" /> : todos.filter((todo) => !selectedDate || todo.dueDate === selectedDate).map((todo) => <div className={'todo-row ' + todo.status} key={todo.id}><button className="todo-check" aria-label={todo.status === 'done' ? '恢复待办' : '完成待办'} onClick={() => void toggleTodo(todo)}>{todo.status === 'done' && <Check size={14} />}</button><span><strong>{todo.title}</strong><small>{todo.dueDate || '未设置日期'} · {todo.priority === 'high' ? '高优先级' : todo.priority === 'low' ? '低优先级' : '普通优先级'}</small></span><button className="icon-button" aria-label="删除待办" onClick={() => void removeTodo(todo)}><Trash2 size={15} /></button></div>)}</div></Panel></aside></div>{creating && <Modal title="新增待办" onClose={() => setCreating(false)}><form className="form-stack" onSubmit={createTodo}><label>待办内容<input value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder="输入待办事项" required autoFocus /></label><label>截止日期<input type="date" value={draft.dueDate} onChange={(event) => setDraft({ ...draft, dueDate: event.target.value })} /></label><label>优先级<select value={draft.priority} onChange={(event) => setDraft({ ...draft, priority: event.target.value as TodoItem['priority'] })}><option value="high">高</option><option value="normal">普通</option><option value="low">低</option></select></label><div className="modal-actions"><button className="button secondary" type="button" onClick={() => setCreating(false)}>取消</button><button className="button primary" type="submit"><Plus size={16} />添加</button></div></form></Modal>}</div>
 }
 function NotificationsPage({ notifications, setNotifications, go }: { notifications: NotificationItem[]; setNotifications: (items: NotificationItem[]) => void; go: (page: Page, id?: string) => void }) {
-  return <div className="page-stack"><PageHeader eyebrow="工作提醒" title="通知中心" description="展示当前账号可见的通知和审批提醒。" actions={<button className="button secondary" onClick={() => { setNotifications(notifications.map((item) => ({ ...item, unread: false }))); void Promise.all(notifications.map((item) => apiFetch('/notifications/' + item.id + '/read', { method: 'POST' }))) }}><Check size={16} />全部标为已读</button>} /><Panel>{notifications.length === 0 ? <EmptyState icon={Bell} title="暂无通知" description="当前没有可展示的通知。" /> : notifications.map((item) => <button key={item.id} className={'notification-row ' + (item.unread ? 'unread' : '')} onClick={() => { setNotifications(notifications.map((current) => current.id === item.id ? { ...current, unread: false } : current)); void apiFetch('/notifications/' + item.id + '/read', { method: 'POST' }); if (item.type === 'approval') go('approval') }}><span className={'notice-dot ' + item.type}><Bell size={15} /></span><span className="notification-copy"><strong>{item.title}</strong><p>{item.detail}</p><small>{item.time}</small></span><ChevronRight size={16} className="muted" /></button>)}</Panel></div>
+  return <div className="page-stack"><PageHeader eyebrow="工作提醒" title="通知中心" description="展示当前账号可见的通知和审批提醒。" actions={<button className="button secondary" onClick={() => { setNotifications(notifications.map((item) => ({ ...item, unread: false }))); void Promise.all(notifications.map((item) => apiFetch('/notifications/' + item.id + '/read', { method: 'POST' }))) }}><Check size={16} />全部标为已读</button>} /><Panel>{notifications.length === 0 ? <EmptyState icon={Bell} title="暂无通知" description="当前没有可展示的通知。" /> : notifications.map((item) => <button key={item.id} className={'notification-row ' + (item.unread ? 'unread' : '')} onClick={() => { setNotifications(notifications.map((current) => current.id === item.id ? { ...current, unread: false } : current)); void apiFetch('/notifications/' + item.id + '/read', { method: 'POST' }); if (item.type === 'approval') go('approval'); if (item.type === 'password_reset') go('admin') }}><span className={'notice-dot ' + item.type}><Bell size={15} /></span><span className="notification-copy"><strong>{item.title}</strong><p>{item.detail}</p><small>{item.time}</small></span><ChevronRight size={16} className="muted" /></button>)}</Panel></div>
 }
 
+type UsageMember = { userId: string; name: string; email: string; department: string; role: Role; inputTokens: number; outputTokens: number; totalTokens: number; requests: number }
+type UsagePoint = { hour: number; label: string; inputTokens: number; outputTokens: number; totalTokens: number; requests: number }
+type UsagePayload = { scope: Role; selectedDay?: string; filters: { providers: string[]; models: string[] }; summary: { inputTokens: number; outputTokens: number; totalTokens: number; requests: number }; trend: UsagePoint[]; members: UsageMember[] }
+
+function UsageTrend({ points }: { points: UsagePoint[] }) {
+  const max = Math.max(1, ...points.map((point) => point.totalTokens))
+  return <div className="usage-chart"><div className="usage-chart-head"><div><h2>使用趋势</h2><p>按小时查看所选日期的模型消耗。</p></div><strong>{max.toLocaleString('zh-CN')} Token 峰值</strong></div><div className="usage-bars" role="img" aria-label="按小时 token 使用趋势">{points.map((point) => <div className="usage-bar-cell" key={point.hour} title={point.label + '：' + point.totalTokens.toLocaleString('zh-CN') + ' Token，' + point.requests + ' 次请求'}><div className="usage-bar-stack"><i className="usage-bar-input" style={{ height: (point.inputTokens / max * 100) + '%' }} /><i className="usage-bar-output" style={{ height: (point.outputTokens / max * 100) + '%' }} /><i className="usage-bar-total" style={{ height: (point.totalTokens / max * 100) + '%' }} /></div><span>{point.hour % 3 === 0 ? point.label : ''}</span></div>)}</div><div className="usage-legend"><span><i className="total" />总 Token</span><span><i className="input" />输入</span><span><i className="output" />输出</span></div></div>
+}
+
+function UsagePage({ notify }: { notify: (message: string) => void }) {
+  const today = new Date().toISOString().slice(0, 10)
+  const [day, setDay] = useState(today)
+  const [provider, setProvider] = useState('')
+  const [model, setModel] = useState('')
+  const [refreshMode, setRefreshMode] = useState('30')
+  const [data, setData] = useState<UsagePayload | null>(null)
+  const [loading, setLoading] = useState(true)
+  const format = (value: number) => value.toLocaleString('zh-CN')
+  const load = useCallback(async () => {
+    setLoading(true)
+    const params = new URLSearchParams({ day })
+    if (provider) params.set('provider', provider)
+    if (model) params.set('model', model)
+    try { setData(await apiFetch<UsagePayload>('/usage?' + params.toString())) } catch (error) { notify(error instanceof Error ? error.message : '模型用量加载失败') } finally { setLoading(false) }
+  }, [day, model, notify, provider])
+  useEffect(() => { void load() }, [load])
+  useEffect(() => {
+    if (refreshMode === 'off') return
+    const timer = window.setInterval(() => void load(), Number(refreshMode) * 1000)
+    return () => window.clearInterval(timer)
+  }, [load, refreshMode])
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+  return <div className="page-stack usage-page"><PageHeader eyebrow="模型可观测性" title="使用统计" description="查看 AI 模型的使用情况和成本统计。" actions={<div className="usage-toolbar"><label><span>数据源</span><select value={provider} onChange={(event) => setProvider(event.target.value)}><option value="">全部来源</option>{data?.filters.providers.map((item) => <option key={item} value={item}>{item}</option>)}</select><ChevronDown size={14} /></label><label><span>模型</span><select value={model} onChange={(event) => setModel(event.target.value)}><option value="">全部模型</option>{data?.filters.models.map((item) => <option key={item} value={item}>{item}</option>)}</select><ChevronDown size={14} /></label><label><span>刷新</span><select value={refreshMode} onChange={(event) => setRefreshMode(event.target.value)}><option value="30">30 秒</option><option value="60">60 秒</option><option value="off">关闭</option></select><RefreshCw size={14} /></label><label className="usage-date"><span>日期</span><input type="date" value={day} onChange={(event) => setDay(event.target.value)} /><CalendarDays size={14} /></label></div>} /><div className="usage-quick-dates"><button className={day === today ? 'active' : ''} type="button" onClick={() => setDay(today)}>今天</button><button className={day === yesterday ? 'active' : ''} type="button" onClick={() => setDay(yesterday)}>昨天</button><span>{day} · {loading ? '加载中' : '数据已更新'}</span></div>{data && <><div className="usage-summary"><div className="usage-primary"><span className="usage-kicker"><BarChart3 size={16} />真实消耗 Tokens</span><strong>{format(data.summary.totalTokens)}</strong><small>约 {(data.summary.totalTokens / 10000).toFixed(2)} 万</small></div><div className="usage-side-stat"><span>总请求数</span><strong>{format(data.summary.requests)}</strong></div><div className="usage-side-stat"><span>总成本</span><strong className="cost-muted">0.0000 USD</strong><small>未配置价格</small></div><div className="usage-metric"><span>Input</span><strong>{format(data.summary.inputTokens)}</strong><small>发送给模型</small></div><div className="usage-metric"><span>Output</span><strong>{format(data.summary.outputTokens)}</strong><small>模型生成</small></div><div className="usage-metric unavailable"><span>缓存创建</span><strong>N/A</strong><small>当前模型未返回</small></div><div className="usage-metric unavailable"><span>缓存命中</span><strong>N/A</strong><small>当前模型未返回</small></div><div className="usage-metric cache-rate"><span>缓存命中率</span><strong>N/A</strong><div className="usage-progress"><i style={{ width: '0%' }} /></div></div></div><Panel className="usage-trend-panel"><UsageTrend points={data.trend} /></Panel><Panel><div className="section-heading"><div><h2>{data.scope === 'employee' ? '我的账号用量' : data.scope === 'manager' ? '本人及所管下属用量' : '组织账号用量'}</h2><p>按账号汇总，数据与每次会话和模型请求关联。</p></div><span className="history-count">{data.members.length} 个账号</span></div><div className="table-wrap"><table><thead><tr><th>账号</th><th>部门</th><th>请求数</th><th>输入 Token</th><th>输出 Token</th><th>总 Token</th></tr></thead><tbody>{data.members.map((member) => <tr key={member.userId}><td><span className="person-cell"><span className="avatar">{member.name.slice(0, 1)}</span><strong>{member.name}<small>{member.email}</small></strong></span></td><td>{member.department}</td><td>{format(member.requests)}</td><td>{format(member.inputTokens)}</td><td>{format(member.outputTokens)}</td><td><strong>{format(member.totalTokens)}</strong></td></tr>)}</tbody></table></div></Panel></>}{!data && !loading && <Panel><EmptyState icon={BarChart3} title="暂无用量数据" description="当前没有可展示的模型调用记录。" /></Panel>}</div>
+}
 function MonitoringPage({ tasks, notify }: { tasks: IngestionTask[]; notify: (message: string) => void }) {
   const active = tasks.filter((task) => task.status === 'processing').length
   const failed = tasks.filter((task) => task.status === 'failed').length
@@ -1007,6 +1064,7 @@ function App() {
     case 'notifications': content = <NotificationsPage notifications={notifications} setNotifications={setNotifications} go={location.go} />; break
     case 'calendar': content = <CalendarPage notify={notify} />; break
     case 'monitoring': content = role === 'employee' ? <AccessDenied title="暂无监控权限" description="运行监控仅对管理层和管理员开放。" /> : <MonitoringPage tasks={tasks} notify={notify} />; break
+    case 'usage': content = <UsagePage notify={notify} />; break
     case 'trace': content = role === 'employee' ? <AccessDenied title="暂无追踪权限" description="全链路审计仅对管理层和管理员开放。" /> : <TracePage notify={notify} />; break
     case 'model': content = role === 'admin' ? <ModelPage notify={notify} /> : <AccessDenied title="仅管理员可配置模型" description="模型 API 和密钥配置属于平台敏感设置。" />; break
     case 'admin': content = <InteractiveAdminPage role={role} notify={notify} />; break

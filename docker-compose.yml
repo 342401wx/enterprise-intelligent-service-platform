@@ -1,0 +1,33 @@
+name: enterprise-intelligent-service-platform
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    environment:
+      PLATFORM_DATA_DIR: /app/data
+      PLATFORM_DB_PATH: /app/data/platform.db
+      PLATFORM_SECRET_KEY_PATH: /app/data/.platform-secret
+      PLATFORM_TEST_PASSWORD: ${PLATFORM_TEST_PASSWORD:-12345678}
+    volumes:
+      - ${DOCKER_DATA_DIR:-./runtime-data}:/app/data
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-5173}:80"
